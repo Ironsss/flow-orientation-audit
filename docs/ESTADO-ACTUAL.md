@@ -24,7 +24,7 @@ donde la orientación fue en gran parte estable.
 | Hipótesis | Pregunta | Estado | Dónde está la evidencia |
 |---|---|---|---|
 | H1 (preregistro original) | ¿Features relacionales suman ΔAUC ≥ 0.05 en el estrato sigiloso? | Nunca ejecutable: el simulador bloqueó la medición | `docs/metodologia/` |
-| **H2** (replanteo operacional) | Bajo restricción de información, ¿la topología degrada menos que la asimetría per-flujo? | ❌ **RECHAZADA**: sintético con potencia completa, y 7/7 condiciones reales certificadas (CICIDS-2018) | `docs/methodology/H2_SYNTHETIC_FINDINGS.md`, `docs/datos-reales/` |
+| **H2** (replanteo operacional) | Bajo restricción de información, ¿la topología degrada menos que la asimetría per-flujo? | ❌ **RECHAZADA**: sintético con potencia completa, y 7/7 filas reales certificadas (CICIDS-2018) que son **5 condiciones distintas** (desviación de implementación respecto al freeze; ver la fe de erratas en `docs/methodology/CLAIMS_LEDGER.md`) | `docs/methodology/H2_SYNTHETIC_FINDINGS.md`, `docs/datos-reales/` |
 | **H3** (validación externa) | ¿El signo y la magnitud de la asimetría per-flujo varían según el mecanismo del ataque? | CICIDS (descubrimiento): sí, aparentemente. **UNSW-NB15: NO REPLICA.** **BoT-IoT: STRONG REPLICATION** por la regla congelada, pero solo 3 de 8 grupos evaluables mantienen orientación confiada bajo host-pair (A1). Interpretación vigente: orientación relacional, no mecanismo | ver abajo |
 | H4 | ¿La combinación supera a per-flujo bajo observabilidad parcial? | **No activada**: el protocolo la condiciona a que H3 replique | — |
 
@@ -111,7 +111,7 @@ las referencias ya verificadas de `references.bib` y su enunciado de posicionami
    agregado ponderado de HOIC 0,0005 y LOIC-UDP 1,000).
 9. Reescritura JISA W1–W3 (2026-09-27/28): W1 Métodos/Resultados, W2 Discusión/Limitaciones (PR #59),
    W3 Introducción/Related Work/Abstract/Título/Conclusiones. No cambió ningún resultado ni se
-   re-ejecutó nada. W4 (2026-09-28): plantilla `elsarticle` aplicada a `main.tex` (compila, 48 pp en formato preprint). Siguiente: material de envío (autores, cover letter, highlights) y revisión externa de
+   re-ejecutó nada. W4 (2026-09-28): plantilla `elsarticle` aplicada a `main.tex` (compila, 48 pp en formato preprint). Paquete de envío en `manuscript_submission/` (2026-09-28): `main.tex` condensado a 12 pp con referencias, `supplementary.tex` con el manuscrito completo, highlights, cover letter y `SUBMISSION_CHECKLIST.md` (la guía de JISA no pudo consultarse: verificar). Pendiente: datos de autores, CRediT, declaración de uso de IA generativa y revisión externa de
    la literatura citada.
 
 ## Reglas que no cambian
