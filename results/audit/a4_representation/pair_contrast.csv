@@ -1,0 +1,17 @@
+X,Y,side,feature,n_X,n_Y,auc_pair,auc_sep,orientation,cross_side_status,tie_share,n_X_rows_feature_identical_to_a_Y_row,n_Y_rows_feature_identical_to_an_X_row,assigns_case
+DDOS attack-LOIC-UDP,DDOS attack-HOIC,canonical,A_bytes,1730,668461,1.0,1.0,positive,PRESERVED,0.0,,,false
+DDOS attack-LOIC-UDP,DDOS attack-HOIC,nf,A_bytes,2112,1080858,1.0,1.0,positive,PRESERVED,0.0,0,0,false
+DDOS attack-LOIC-UDP,DDOS attack-HOIC,canonical,A_packets,1730,668461,1.0,1.0,positive,PRESERVED,0.0,,,false
+DDOS attack-LOIC-UDP,DDOS attack-HOIC,nf,A_packets,2112,1080858,1.0,1.0,positive,PRESERVED,0.0,0,0,false
+DoS attacks-SlowHTTPTest,DoS attacks-Hulk,canonical,A_bytes,19462,434873,0.528755521727033,0.528755521727033,near-neutral,EMERGED,0.9412518137479218,,,false
+DoS attacks-SlowHTTPTest,DoS attacks-Hulk,nf,A_bytes,14116,432648,0.9988142785821268,0.9988142785821268,positive,EMERGED,0.0,0,0,false
+DoS attacks-SlowHTTPTest,DoS attacks-Hulk,canonical,A_packets,19462,434873,0.05018591634799125,0.9498140836520087,negative,PRESERVED,0.011095193309310995,,,false
+DoS attacks-SlowHTTPTest,DoS attacks-Hulk,nf,A_packets,14116,432648,0.11201022540263679,0.8879897745973632,negative,PRESERVED,0.213869011297868,0,0,false
+DoS attacks-Slowloris,DoS attacks-GoldenEye,canonical,A_bytes,10285,41455,0.9322859709238341,0.9322859709238341,positive,PRESERVED,0.07501697930298752,,,false
+DoS attacks-Slowloris,DoS attacks-GoldenEye,nf,A_bytes,9512,27723,0.9942737153360287,0.9942737153360287,positive,PRESERVED,0.0,0,0,false
+DoS attacks-Slowloris,DoS attacks-GoldenEye,canonical,A_packets,10285,41455,0.7602186133267255,0.7602186133267255,positive,PRESERVED,0.1027849035570313,,,false
+DoS attacks-Slowloris,DoS attacks-GoldenEye,nf,A_packets,9512,27723,0.9410235242940289,0.9410235242940289,positive,PRESERVED,0.00026931999726842324,0,0,false
+FTP-BruteForce,SSH-Bruteforce,canonical,A_bytes,39352,117322,0.8998312336987095,0.8998312336987095,positive,PRESERVED,0.20033753260258094,,,false
+FTP-BruteForce,SSH-Bruteforce,nf,A_bytes,25933,94979,0.9998736562819149,0.9998736562819149,positive,PRESERVED,0.0,0,0,false
+FTP-BruteForce,SSH-Bruteforce,canonical,A_packets,39352,117322,0.3355551388486388,0.6644448611513611,negative,PRESERVED,0.5696629788104532,,,false
+FTP-BruteForce,SSH-Bruteforce,nf,A_packets,25933,94979,0.23703134377072826,0.7629686562292717,negative,PRESERVED,0.3479295423198812,0,0,false

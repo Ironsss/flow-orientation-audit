@@ -1,0 +1,35 @@
+{
+ "started_utc": "2026-09-27T23:37:39Z",
+ "git_head": "923c8f4ad6bb232ee6264842ccd14242be4ca043",
+ "freeze_commit": "946337f",
+ "command": "scripts/audit_a4_representation.py --canonical-dir C:/Users/DavidG/iag-symmetry/data/raw --nf-path C:/Users/DavidG/Downloads/b3427ed8ad063a09_MOHANAD_A4706/b3427ed8ad063a09_MOHANAD_A4706/data/NF-CSE-CIC-IDS2018-v2.csv",
+ "python": "3.11.16 (main, Aug 25 2026, 13:59:19) [MSC v.1944 64 bit (AMD64)]",
+ "platform": "Windows-10-10.0.19045-SP0",
+ "polars": "1.44.1",
+ "numpy": "2.4.6",
+ "nf_sha256": "16a545a3e139b2e85d08b1b7d9d40328c3689a49d0deaafce6dcf8d7b63e1257",
+ "nf_gate": {
+  "rows": 18893708,
+  "benign": 16635567,
+  "attack": 2258141
+ },
+ "nf_exact_duplicates_removed": 0,
+ "case_primary_A_bytes (the A4 case)": "C",
+ "case_primary_A_packets (reported, NOT assigned per freeze)": "C",
+ "case_if_diagnostic_raw_coarse_were_primary_A_bytes (Q6, NOT assigned)": "C",
+ "diagnostic_would_suggest_different_case": false,
+ "finished_utc": "2026-09-27T23:45:12Z",
+ "output_sha256": {
+  "canonical_reproduction.csv": "a9d1a8ba56ac76e1e949502f59b15148826b3fc3d53de65271075791a91a286b",
+  "fine_label_auc.csv": "8acf605401ae3d7a89011cf6b855e8ab9b29bf54df9465e9e03526de0a4d88e6",
+  "comparison.csv": "cfecf67f78e9398c43a383db9db458e088bb935bbd0fd8d8933f6501108c959b",
+  "ddos_ordering.csv": "c21bb9de5869328d67dc7ecde23907764fcd37299c37f697c7f9366ec34cf976",
+  "coarse_standardized.csv": "fc23f2717030fa4a680e5fdb6b74f244c2e23c659fef740024953dc551063f94",
+  "coarse_diagnostic.csv": "18587c67ecdae159804151c46e96524349a42601a0132e69fdd61a388b90fcdf",
+  "pair_contrast.csv": "6c896e43639ead0ceffb951c2384ef038a5d03ac6659218d8538ea1fa92eee6a",
+  "reply_rates.csv": "06ca0439bc8609a20f80a195c52887d27a1429961b1147d51855894a7339d12d",
+  "canonical_capture_matched.csv": "8f236efd5f0f5dfc8bb99a1999c78379c0abb437b352e5ca8be0acf102ded6fb",
+  "canonical_categories.csv": "e54fb9b38b7abec6d8483710d50da1977d1f2178672497e1057f0568f03345e6",
+  "nfv2_categories.csv": "60435724b2a05babf43eadd18b71a661b856d86911b9838c612bb44188a9c6bd"
+ }
+}

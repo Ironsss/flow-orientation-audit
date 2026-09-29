@@ -1,0 +1,472 @@
+{
+ "started_utc": "2026-09-27T21:59:39Z",
+ "git_head": "bdc07f75b10a5fb7e3302758bb111d2073ffc93c",
+ "python": "3.11.16 (main, Aug 25 2026, 13:59:19) [MSC v.1944 64 bit (AMD64)]",
+ "platform": "Windows-10-10.0.19045-SP0",
+ "polars": "1.44.1",
+ "bag_dir": "C:\\Users\\DavidG\\Downloads\\9810e03bba4983da_MOHANAD_A4706\\9810e03bba4983da_MOHANAD_A4706",
+ "files": {
+  "NetFlow_v2_Features.csv": {
+   "size_bytes": 2115,
+   "sha256": "f20e86a939f9eb53b06ace15de4cc977ed61c02e538c6465efe72b635448e939",
+   "sha1": "6cf84d2d76c29321175d9429996d7cda2f3b15d6",
+   "sha1_matches_bag_manifest": true
+  },
+  "NF-UQ-NIDS-v2.csv": {
+   "size_bytes": 13729330230,
+   "sha256": "7e55364a20d98b9517097de77bbff168d1d0b047b8bb50bf4bb16287804920c8",
+   "sha1": "922558cda9e7c5a054d6882c76f6357c5f89d58a",
+   "sha1_matches_bag_manifest": true
+  }
+ },
+ "doc_rows": 43,
+ "inferred_dtypes_100k": {
+  "IPV4_SRC_ADDR": "String",
+  "L4_SRC_PORT": "Int64",
+  "IPV4_DST_ADDR": "String",
+  "L4_DST_PORT": "Int64",
+  "PROTOCOL": "Int64",
+  "L7_PROTO": "Float64",
+  "IN_BYTES": "Int64",
+  "IN_PKTS": "Int64",
+  "OUT_BYTES": "Int64",
+  "OUT_PKTS": "Int64",
+  "TCP_FLAGS": "Int64",
+  "CLIENT_TCP_FLAGS": "Int64",
+  "SERVER_TCP_FLAGS": "Int64",
+  "FLOW_DURATION_MILLISECONDS": "Int64",
+  "DURATION_IN": "Int64",
+  "DURATION_OUT": "Int64",
+  "MIN_TTL": "Int64",
+  "MAX_TTL": "Int64",
+  "LONGEST_FLOW_PKT": "Int64",
+  "SHORTEST_FLOW_PKT": "Int64",
+  "MIN_IP_PKT_LEN": "Int64",
+  "MAX_IP_PKT_LEN": "Int64",
+  "SRC_TO_DST_SECOND_BYTES": "Float64",
+  "DST_TO_SRC_SECOND_BYTES": "Float64",
+  "RETRANSMITTED_IN_BYTES": "Int64",
+  "RETRANSMITTED_IN_PKTS": "Int64",
+  "RETRANSMITTED_OUT_BYTES": "Int64",
+  "RETRANSMITTED_OUT_PKTS": "Int64",
+  "SRC_TO_DST_AVG_THROUGHPUT": "Int64",
+  "DST_TO_SRC_AVG_THROUGHPUT": "Int64",
+  "NUM_PKTS_UP_TO_128_BYTES": "Int64",
+  "NUM_PKTS_128_TO_256_BYTES": "Int64",
+  "NUM_PKTS_256_TO_512_BYTES": "Int64",
+  "NUM_PKTS_512_TO_1024_BYTES": "Int64",
+  "NUM_PKTS_1024_TO_1514_BYTES": "Int64",
+  "TCP_WIN_MAX_IN": "Int64",
+  "TCP_WIN_MAX_OUT": "Int64",
+  "ICMP_TYPE": "Int64",
+  "ICMP_IPV4_TYPE": "Int64",
+  "DNS_QUERY_ID": "Int64",
+  "DNS_QUERY_TYPE": "Int64",
+  "DNS_TTL_ANSWER": "Int64",
+  "FTP_COMMAND_RET_CODE": "Float64",
+  "Label": "Int64",
+  "Attack": "String",
+  "Dataset": "String"
+ },
+ "rows": 75987976,
+ "null_counts": {
+  "IPV4_SRC_ADDR": 0,
+  "L4_SRC_PORT": 0,
+  "IPV4_DST_ADDR": 0,
+  "L4_DST_PORT": 0,
+  "PROTOCOL": 0,
+  "L7_PROTO": 0,
+  "IN_BYTES": 0,
+  "IN_PKTS": 0,
+  "OUT_BYTES": 0,
+  "OUT_PKTS": 0,
+  "TCP_FLAGS": 0,
+  "CLIENT_TCP_FLAGS": 0,
+  "SERVER_TCP_FLAGS": 0,
+  "FLOW_DURATION_MILLISECONDS": 0,
+  "DURATION_IN": 0,
+  "DURATION_OUT": 0,
+  "MIN_TTL": 0,
+  "MAX_TTL": 0,
+  "LONGEST_FLOW_PKT": 0,
+  "SHORTEST_FLOW_PKT": 0,
+  "MIN_IP_PKT_LEN": 0,
+  "MAX_IP_PKT_LEN": 0,
+  "SRC_TO_DST_SECOND_BYTES": 0,
+  "DST_TO_SRC_SECOND_BYTES": 0,
+  "RETRANSMITTED_IN_BYTES": 0,
+  "RETRANSMITTED_IN_PKTS": 0,
+  "RETRANSMITTED_OUT_BYTES": 0,
+  "RETRANSMITTED_OUT_PKTS": 0,
+  "SRC_TO_DST_AVG_THROUGHPUT": 0,
+  "DST_TO_SRC_AVG_THROUGHPUT": 0,
+  "NUM_PKTS_UP_TO_128_BYTES": 0,
+  "NUM_PKTS_128_TO_256_BYTES": 0,
+  "NUM_PKTS_256_TO_512_BYTES": 0,
+  "NUM_PKTS_512_TO_1024_BYTES": 0,
+  "NUM_PKTS_1024_TO_1514_BYTES": 0,
+  "TCP_WIN_MAX_IN": 0,
+  "TCP_WIN_MAX_OUT": 0,
+  "ICMP_TYPE": 0,
+  "ICMP_IPV4_TYPE": 0,
+  "DNS_QUERY_ID": 0,
+  "DNS_QUERY_TYPE": 0,
+  "DNS_TTL_ANSWER": 0,
+  "FTP_COMMAND_RET_CODE": 0,
+  "Label": 0,
+  "Attack": 0,
+  "Dataset": 0
+ },
+ "empty_string_counts": {
+  "IPV4_SRC_ADDR": 0,
+  "L4_SRC_PORT": 0,
+  "IPV4_DST_ADDR": 0,
+  "L4_DST_PORT": 0,
+  "PROTOCOL": 0,
+  "L7_PROTO": 0,
+  "IN_BYTES": 0,
+  "IN_PKTS": 0,
+  "OUT_BYTES": 0,
+  "OUT_PKTS": 0,
+  "TCP_FLAGS": 0,
+  "CLIENT_TCP_FLAGS": 0,
+  "SERVER_TCP_FLAGS": 0,
+  "FLOW_DURATION_MILLISECONDS": 0,
+  "DURATION_IN": 0,
+  "DURATION_OUT": 0,
+  "MIN_TTL": 0,
+  "MAX_TTL": 0,
+  "LONGEST_FLOW_PKT": 0,
+  "SHORTEST_FLOW_PKT": 0,
+  "MIN_IP_PKT_LEN": 0,
+  "MAX_IP_PKT_LEN": 0,
+  "SRC_TO_DST_SECOND_BYTES": 0,
+  "DST_TO_SRC_SECOND_BYTES": 0,
+  "RETRANSMITTED_IN_BYTES": 0,
+  "RETRANSMITTED_IN_PKTS": 0,
+  "RETRANSMITTED_OUT_BYTES": 0,
+  "RETRANSMITTED_OUT_PKTS": 0,
+  "SRC_TO_DST_AVG_THROUGHPUT": 0,
+  "DST_TO_SRC_AVG_THROUGHPUT": 0,
+  "NUM_PKTS_UP_TO_128_BYTES": 0,
+  "NUM_PKTS_128_TO_256_BYTES": 0,
+  "NUM_PKTS_256_TO_512_BYTES": 0,
+  "NUM_PKTS_512_TO_1024_BYTES": 0,
+  "NUM_PKTS_1024_TO_1514_BYTES": 0,
+  "TCP_WIN_MAX_IN": 0,
+  "TCP_WIN_MAX_OUT": 0,
+  "ICMP_TYPE": 0,
+  "ICMP_IPV4_TYPE": 0,
+  "DNS_QUERY_ID": 0,
+  "DNS_QUERY_TYPE": 0,
+  "DNS_TTL_ANSWER": 0,
+  "FTP_COMMAND_RET_CODE": 0,
+  "Label": 0,
+  "Attack": 0,
+  "Dataset": 0
+ },
+ "numeric_parse_failures": {
+  "L4_SRC_PORT": 0,
+  "L4_DST_PORT": 0,
+  "PROTOCOL": 0,
+  "L7_PROTO": 0,
+  "IN_BYTES": 0,
+  "IN_PKTS": 0,
+  "OUT_BYTES": 0,
+  "OUT_PKTS": 0,
+  "TCP_FLAGS": 0,
+  "CLIENT_TCP_FLAGS": 0,
+  "SERVER_TCP_FLAGS": 0,
+  "FLOW_DURATION_MILLISECONDS": 0,
+  "DURATION_IN": 0,
+  "DURATION_OUT": 0,
+  "MIN_TTL": 0,
+  "MAX_TTL": 0,
+  "LONGEST_FLOW_PKT": 0,
+  "SHORTEST_FLOW_PKT": 0,
+  "MIN_IP_PKT_LEN": 0,
+  "MAX_IP_PKT_LEN": 0,
+  "SRC_TO_DST_SECOND_BYTES": 0,
+  "DST_TO_SRC_SECOND_BYTES": 0,
+  "RETRANSMITTED_IN_BYTES": 0,
+  "RETRANSMITTED_IN_PKTS": 0,
+  "RETRANSMITTED_OUT_BYTES": 0,
+  "RETRANSMITTED_OUT_PKTS": 0,
+  "SRC_TO_DST_AVG_THROUGHPUT": 0,
+  "DST_TO_SRC_AVG_THROUGHPUT": 0,
+  "NUM_PKTS_UP_TO_128_BYTES": 0,
+  "NUM_PKTS_128_TO_256_BYTES": 0,
+  "NUM_PKTS_256_TO_512_BYTES": 0,
+  "NUM_PKTS_512_TO_1024_BYTES": 0,
+  "NUM_PKTS_1024_TO_1514_BYTES": 0,
+  "TCP_WIN_MAX_IN": 0,
+  "TCP_WIN_MAX_OUT": 0,
+  "ICMP_TYPE": 0,
+  "ICMP_IPV4_TYPE": 0,
+  "DNS_QUERY_ID": 0,
+  "DNS_QUERY_TYPE": 0,
+  "DNS_TTL_ANSWER": 0,
+  "FTP_COMMAND_RET_CODE": 0,
+  "Label": 0
+ },
+ "dataset_label_attack_counts": [
+  {
+   "Dataset": "NF-BoT-IoT-v2",
+   "Label": "0",
+   "Attack": "Benign",
+   "n": 135037
+  },
+  {
+   "Dataset": "NF-BoT-IoT-v2",
+   "Label": "1",
+   "Attack": "DDoS",
+   "n": 18331847
+  },
+  {
+   "Dataset": "NF-BoT-IoT-v2",
+   "Label": "1",
+   "Attack": "DoS",
+   "n": 16673183
+  },
+  {
+   "Dataset": "NF-BoT-IoT-v2",
+   "Label": "1",
+   "Attack": "Reconnaissance",
+   "n": 2620999
+  },
+  {
+   "Dataset": "NF-BoT-IoT-v2",
+   "Label": "1",
+   "Attack": "Theft",
+   "n": 2431
+  },
+  {
+   "Dataset": "NF-CSE-CIC-IDS2018-v2",
+   "Label": "0",
+   "Attack": "Benign",
+   "n": 16635567
+  },
+  {
+   "Dataset": "NF-CSE-CIC-IDS2018-v2",
+   "Label": "1",
+   "Attack": "Bot",
+   "n": 143097
+  },
+  {
+   "Dataset": "NF-CSE-CIC-IDS2018-v2",
+   "Label": "1",
+   "Attack": "Brute Force",
+   "n": 123982
+  },
+  {
+   "Dataset": "NF-CSE-CIC-IDS2018-v2",
+   "Label": "1",
+   "Attack": "DDoS",
+   "n": 1390270
+  },
+  {
+   "Dataset": "NF-CSE-CIC-IDS2018-v2",
+   "Label": "1",
+   "Attack": "DoS",
+   "n": 483999
+  },
+  {
+   "Dataset": "NF-CSE-CIC-IDS2018-v2",
+   "Label": "1",
+   "Attack": "Infilteration",
+   "n": 116361
+  },
+  {
+   "Dataset": "NF-CSE-CIC-IDS2018-v2",
+   "Label": "1",
+   "Attack": "injection",
+   "n": 432
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "0",
+   "Attack": "Benign",
+   "n": 6099469
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "1",
+   "Attack": "Backdoor",
+   "n": 16809
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "1",
+   "Attack": "DDoS",
+   "n": 2026234
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "1",
+   "Attack": "DoS",
+   "n": 712609
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "1",
+   "Attack": "injection",
+   "n": 684465
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "1",
+   "Attack": "mitm",
+   "n": 7723
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "1",
+   "Attack": "password",
+   "n": 1153323
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "1",
+   "Attack": "ransomware",
+   "n": 3425
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "1",
+   "Attack": "scanning",
+   "n": 3781419
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "Label": "1",
+   "Attack": "xss",
+   "n": 2455020
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "0",
+   "Attack": "Benign",
+   "n": 2295222
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "1",
+   "Attack": "Analysis",
+   "n": 2299
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "1",
+   "Attack": "Backdoor",
+   "n": 2169
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "1",
+   "Attack": "DoS",
+   "n": 5794
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "1",
+   "Attack": "Exploits",
+   "n": 31551
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "1",
+   "Attack": "Fuzzers",
+   "n": 22310
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "1",
+   "Attack": "Generic",
+   "n": 16560
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "1",
+   "Attack": "Reconnaissance",
+   "n": 12779
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "1",
+   "Attack": "Shellcode",
+   "n": 1427
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "Label": "1",
+   "Attack": "Worms",
+   "n": 164
+  }
+ ],
+ "duplicates_by_dataset": [
+  {
+   "Dataset": "NF-BoT-IoT-v2",
+   "distinct_rows": 37643287,
+   "rows": 37763497,
+   "duplicate_rows": 120210
+  },
+  {
+   "Dataset": "NF-CSE-CIC-IDS2018-v2",
+   "distinct_rows": 18893636,
+   "rows": 18893708,
+   "duplicate_rows": 72
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "distinct_rows": 16940496,
+   "rows": 16940496,
+   "duplicate_rows": 0
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "distinct_rows": 2390275,
+   "rows": 2390275,
+   "duplicate_rows": 0
+  }
+ ],
+ "distinct_ips_by_dataset": [
+  {
+   "Dataset": "NF-BoT-IoT-v2",
+   "n_src_ip": 20,
+   "n_dst_ip": 291
+  },
+  {
+   "Dataset": "NF-CSE-CIC-IDS2018-v2",
+   "n_src_ip": 224568,
+   "n_dst_ip": 33614
+  },
+  {
+   "Dataset": "NF-ToN-IoT-v2",
+   "n_src_ip": 23079,
+   "n_dst_ip": 6868
+  },
+  {
+   "Dataset": "NF-UNSW-NB15-v2",
+   "n_src_ip": 40,
+   "n_dst_ip": 40
+  }
+ ],
+ "cic_label_blind_invariant_violations": {
+  "rows": 18893708,
+  "retx_in_bytes_gt_in_bytes": 0,
+  "retx_out_bytes_gt_out_bytes": 0,
+  "retx_in_pkts_gt_in_pkts": 0,
+  "retx_out_pkts_gt_out_pkts": 0,
+  "in_pkts0_but_in_bytes_pos": 0,
+  "in_pkts_pos_but_in_bytes0": 0,
+  "out_pkts0_but_out_bytes_pos": 0,
+  "out_pkts_pos_but_out_bytes0": 0,
+  "in_bytes_lt_20_per_in_pkt": 0,
+  "out_bytes_lt_20_per_out_pkt": 0,
+  "tot_bytes_lt_shortest_x_pkts": 0,
+  "tot_bytes_gt_longest_x_pkts": 0,
+  "size_bins_ne_total_pkts": 1122754,
+  "zero_total_pkts": 0
+ },
+ "finished_utc": "2026-09-27T22:01:36Z"
+}

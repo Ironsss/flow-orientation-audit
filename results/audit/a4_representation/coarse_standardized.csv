@@ -1,0 +1,37 @@
+category,weighting,side,feature,weights,auc_signed_standardized,auc_sep,orientation,cross_side_status,weighting_fragile_this_side,convention_dependent,assigns_case
+DDoS,canonical_row_share,canonical,A_bytes,DDOS attack-HOIC=0.536321;DDoS attacks-LOIC-HTTP=0.462291;DDOS attack-LOIC-UDP=0.001388,0.47545481238798376,0.5245451876120162,near-neutral,EMERGED,true,true,false
+DDoS,canonical_row_share,nf,A_bytes,DDOS attack-HOIC=0.536321;DDoS attacks-LOIC-HTTP=0.462291;DDOS attack-LOIC-UDP=0.001388,0.1806483330130789,0.8193516669869211,negative,EMERGED,true,true,false
+DDoS,nf_row_share,canonical,A_bytes,DDOS attack-HOIC=0.777445;DDoS attacks-LOIC-HTTP=0.221036;DDOS attack-LOIC-UDP=0.001519,0.5285496587195049,0.5285496587195049,near-neutral,EMERGED,true,true,false
+DDoS,nf_row_share,nf,A_bytes,DDOS attack-HOIC=0.777445;DDoS attacks-LOIC-HTTP=0.221036;DDOS attack-LOIC-UDP=0.001519,0.20349516709575372,0.7965048329042463,negative,EMERGED,true,true,false
+DDoS,equal_mechanism,canonical,A_bytes,DDOS attack-HOIC=0.333333;DDoS attacks-LOIC-HTTP=0.333333;DDOS attack-LOIC-UDP=0.333333,0.6443843761908958,0.6443843761908958,positive,NEUTRALIZED,true,true,false
+DDoS,equal_mechanism,nf,A_bytes,DDOS attack-HOIC=0.333333;DDoS attacks-LOIC-HTTP=0.333333;DDOS attack-LOIC-UDP=0.333333,0.4506765479629483,0.5493234520370517,near-neutral,NEUTRALIZED,true,true,false
+DDoS,canonical_row_share,canonical,A_packets,DDOS attack-HOIC=0.536321;DDoS attacks-LOIC-HTTP=0.462291;DDOS attack-LOIC-UDP=0.001388,0.5732349165790748,0.5732349165790748,positive,PRESERVED,true,true,false
+DDoS,canonical_row_share,nf,A_packets,DDOS attack-HOIC=0.536321;DDoS attacks-LOIC-HTTP=0.462291;DDOS attack-LOIC-UDP=0.001388,0.5629668560422095,0.5629668560422095,positive,PRESERVED,true,true,false
+DDoS,nf_row_share,canonical,A_packets,DDOS attack-HOIC=0.777445;DDoS attacks-LOIC-HTTP=0.221036;DDOS attack-LOIC-UDP=0.001519,0.6246273639164861,0.6246273639164861,positive,NEUTRALIZED,true,true,false
+DDoS,nf_row_share,nf,A_packets,DDOS attack-HOIC=0.777445;DDoS attacks-LOIC-HTTP=0.221036;DDOS attack-LOIC-UDP=0.001519,0.45510510228064527,0.5448948977193547,near-neutral,NEUTRALIZED,true,true,false
+DDoS,equal_mechanism,canonical,A_packets,DDOS attack-HOIC=0.333333;DDoS attacks-LOIC-HTTP=0.333333;DDOS attack-LOIC-UDP=0.333333,0.709834909814036,0.709834909814036,positive,PRESERVED,true,true,false
+DDoS,equal_mechanism,nf,A_packets,DDOS attack-HOIC=0.333333;DDoS attacks-LOIC-HTTP=0.333333;DDOS attack-LOIC-UDP=0.333333,0.7192962296873208,0.7192962296873208,positive,PRESERVED,true,true,false
+DoS,canonical_row_share,canonical,A_bytes,DoS attacks-Hulk=0.859305;DoS attacks-GoldenEye=0.081915;DoS attacks-SlowHTTPTest=0.038457;DoS attacks-Slowloris=0.020323,0.668769914775827,0.668769914775827,positive,REVERSED,false,true,false
+DoS,canonical_row_share,nf,A_bytes,DoS attacks-Hulk=0.859305;DoS attacks-GoldenEye=0.081915;DoS attacks-SlowHTTPTest=0.038457;DoS attacks-Slowloris=0.020323,0.3945619393606121,0.6054380606393879,negative,REVERSED,true,true,false
+DoS,nf_row_share,canonical,A_bytes,DoS attacks-Hulk=0.893903;DoS attacks-GoldenEye=0.057279;DoS attacks-SlowHTTPTest=0.029165;DoS attacks-Slowloris=0.019653,0.6736279802333737,0.6736279802333737,positive,REVERSED,false,true,false
+DoS,nf_row_share,nf,A_bytes,DoS attacks-Hulk=0.893903;DoS attacks-GoldenEye=0.057279;DoS attacks-SlowHTTPTest=0.029165;DoS attacks-Slowloris=0.019653,0.3853518935973748,0.6146481064026252,negative,REVERSED,true,true,false
+DoS,equal_mechanism,canonical,A_bytes,DoS attacks-Hulk=0.250000;DoS attacks-GoldenEye=0.250000;DoS attacks-SlowHTTPTest=0.250000;DoS attacks-Slowloris=0.250000,0.6900395312659173,0.6900395312659173,positive,PRESERVED,false,true,false
+DoS,equal_mechanism,nf,A_bytes,DoS attacks-Hulk=0.250000;DoS attacks-GoldenEye=0.250000;DoS attacks-SlowHTTPTest=0.250000;DoS attacks-Slowloris=0.250000,0.6680116739755347,0.6680116739755347,positive,PRESERVED,true,true,false
+DoS,canonical_row_share,canonical,A_packets,DoS attacks-Hulk=0.859305;DoS attacks-GoldenEye=0.081915;DoS attacks-SlowHTTPTest=0.038457;DoS attacks-Slowloris=0.020323,0.8003643561801109,0.8003643561801109,positive,PRESERVED,true,false,false
+DoS,canonical_row_share,nf,A_packets,DoS attacks-Hulk=0.859305;DoS attacks-GoldenEye=0.081915;DoS attacks-SlowHTTPTest=0.038457;DoS attacks-Slowloris=0.020323,0.6371123966060536,0.6371123966060536,positive,PRESERVED,true,false,false
+DoS,nf_row_share,canonical,A_packets,DoS attacks-Hulk=0.893903;DoS attacks-GoldenEye=0.057279;DoS attacks-SlowHTTPTest=0.029165;DoS attacks-Slowloris=0.019653,0.811729985906567,0.811729985906567,positive,PRESERVED,true,false,false
+DoS,nf_row_share,nf,A_packets,DoS attacks-Hulk=0.893903;DoS attacks-GoldenEye=0.057279;DoS attacks-SlowHTTPTest=0.029165;DoS attacks-Slowloris=0.019653,0.6320384518558708,0.6320384518558708,positive,PRESERVED,true,false,false
+DoS,equal_mechanism,canonical,A_packets,DoS attacks-Hulk=0.250000;DoS attacks-GoldenEye=0.250000;DoS attacks-SlowHTTPTest=0.250000;DoS attacks-Slowloris=0.250000,0.6236792848192159,0.6236792848192159,positive,PRESERVED,true,false,false
+DoS,equal_mechanism,nf,A_packets,DoS attacks-Hulk=0.250000;DoS attacks-GoldenEye=0.250000;DoS attacks-SlowHTTPTest=0.250000;DoS attacks-Slowloris=0.250000,0.714131085435783,0.714131085435783,positive,PRESERVED,true,false,false
+Brute Force,canonical_row_share,canonical,A_bytes,SSH-Bruteforce=0.748829;FTP-BruteForce=0.251171,0.5733277789373853,0.5733277789373853,positive,PRESERVED,true,false,false
+Brute Force,canonical_row_share,nf,A_bytes,SSH-Bruteforce=0.748829;FTP-BruteForce=0.251171,0.7488624667982567,0.7488624667982567,positive,PRESERVED,false,false,false
+Brute Force,nf_row_share,canonical,A_bytes,SSH-Bruteforce=0.785522;FTP-BruteForce=0.214478,0.5666958690579906,0.5666958690579906,positive,PRESERVED,true,false,false
+Brute Force,nf_row_share,nf,A_bytes,SSH-Bruteforce=0.785522;FTP-BruteForce=0.214478,0.7427037811677605,0.7427037811677605,positive,PRESERVED,false,false,false
+Brute Force,equal_mechanism,canonical,A_bytes,SSH-Bruteforce=0.500000;FTP-BruteForce=0.500000,0.6183013017565773,0.6183013017565773,positive,PRESERVED,true,false,false
+Brute Force,equal_mechanism,nf,A_bytes,SSH-Bruteforce=0.500000;FTP-BruteForce=0.500000,0.7906268746048111,0.7906268746048111,positive,PRESERVED,false,false,false
+Brute Force,canonical_row_share,canonical,A_packets,SSH-Bruteforce=0.748829;FTP-BruteForce=0.251171,0.3496941812828386,0.6503058187171614,negative,NEUTRALIZED,false,true,false
+Brute Force,canonical_row_share,nf,A_packets,SSH-Bruteforce=0.748829;FTP-BruteForce=0.251171,0.4870136282292652,0.5129863717707348,near-neutral,NEUTRALIZED,true,true,false
+Brute Force,nf_row_share,canonical,A_packets,SSH-Bruteforce=0.785522;FTP-BruteForce=0.214478,0.35269786575659545,0.6473021342434045,negative,NEUTRALIZED,false,true,false
+Brute Force,nf_row_share,nf,A_packets,SSH-Bruteforce=0.785522;FTP-BruteForce=0.214478,0.4935646573291043,0.5064353426708956,near-neutral,NEUTRALIZED,true,true,false
+Brute Force,equal_mechanism,canonical,A_packets,SSH-Bruteforce=0.500000;FTP-BruteForce=0.500000,0.3293250455920973,0.6706749544079027,negative,PRESERVED,false,true,false
+Brute Force,equal_mechanism,nf,A_packets,SSH-Bruteforce=0.500000;FTP-BruteForce=0.500000,0.4425885889768164,0.5574114110231836,negative,PRESERVED,true,true,false

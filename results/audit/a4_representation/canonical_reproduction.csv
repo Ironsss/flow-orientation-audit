@@ -1,0 +1,172 @@
+gate,item,feature,expected,got,abs_diff,tol,passed
+G1 per-label global-benign AUC vs auc_by_slice.csv,DDOS attack-HOIC,A_bytes,0.5765006460287126,0.5765006460287126,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DDOS attack-HOIC,A_bytes,668461.0,668461.0,0.0,0.0,true
+G1 n_attack vs frozen count,DDOS attack-HOIC,A_bytes,668461.0,668461.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DDOS attack-HOIC,A_packets,0.6711738153882112,0.6711738153882112,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DDOS attack-HOIC,A_packets,668461.0,668461.0,0.0,0.0,true
+G1 n_attack vs frozen count,DDOS attack-HOIC,A_packets,668461.0,668461.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DDOS attack-LOIC-UDP,A_bytes,0.9999997022264956,0.9999997022264956,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DDOS attack-LOIC-UDP,A_bytes,1730.0,1730.0,0.0,0.0,true
+G1 n_attack vs frozen count,DDOS attack-LOIC-UDP,A_bytes,1730.0,1730.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DDOS attack-LOIC-UDP,A_packets,0.9999999751283157,0.9999999751283157,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DDOS attack-LOIC-UDP,A_packets,1730.0,1730.0,0.0,0.0,true
+G1 n_attack vs frozen count,DDOS attack-LOIC-UDP,A_packets,1730.0,1730.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DDoS attacks-LOIC-HTTP,A_bytes,0.3566527803174795,0.3566527803174795,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DDoS attacks-LOIC-HTTP,A_bytes,576191.0,576191.0,0.0,0.0,true
+G1 n_attack vs frozen count,DDoS attacks-LOIC-HTTP,A_bytes,576191.0,576191.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DDoS attacks-LOIC-HTTP,A_packets,0.4583309389255808,0.4583309389255808,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DDoS attacks-LOIC-HTTP,A_packets,576191.0,576191.0,0.0,0.0,true
+G1 n_attack vs frozen count,DDoS attacks-LOIC-HTTP,A_packets,576191.0,576191.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DoS attacks-Hulk,A_bytes,0.6806707651872218,0.6806707651872218,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DoS attacks-Hulk,A_bytes,434873.0,434873.0,0.0,0.0,true
+G1 n_attack vs frozen count,DoS attacks-Hulk,A_bytes,434873.0,434873.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DoS attacks-Hulk,A_packets,0.8437111425927892,0.8437111425927892,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DoS attacks-Hulk,A_packets,434873.0,434873.0,0.0,0.0,true
+G1 n_attack vs frozen count,DoS attacks-Hulk,A_packets,434873.0,434873.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DoS attacks-SlowHTTPTest,A_bytes,0.7086717226129847,0.7086717226129847,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DoS attacks-SlowHTTPTest,A_bytes,19462.0,19462.0,0.0,0.0,true
+G1 n_attack vs frozen count,DoS attacks-SlowHTTPTest,A_bytes,19462.0,19462.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DoS attacks-SlowHTTPTest,A_packets,0.2883950216699324,0.2883950216699324,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DoS attacks-SlowHTTPTest,A_packets,19462.0,19462.0,0.0,0.0,true
+G1 n_attack vs frozen count,DoS attacks-SlowHTTPTest,A_packets,19462.0,19462.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DoS attacks-GoldenEye,A_bytes,0.46683955906850455,0.46683955906850455,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DoS attacks-GoldenEye,A_bytes,41455.0,41455.0,0.0,0.0,true
+G1 n_attack vs frozen count,DoS attacks-GoldenEye,A_bytes,41455.0,41455.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DoS attacks-GoldenEye,A_packets,0.5938401684740104,0.5938401684740104,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DoS attacks-GoldenEye,A_packets,41455.0,41455.0,0.0,0.0,true
+G1 n_attack vs frozen count,DoS attacks-GoldenEye,A_packets,41455.0,41455.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DoS attacks-Slowloris,A_bytes,0.9039760781949582,0.9039760781949582,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DoS attacks-Slowloris,A_bytes,10285.0,10285.0,0.0,0.0,true
+G1 n_attack vs frozen count,DoS attacks-Slowloris,A_bytes,10285.0,10285.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,DoS attacks-Slowloris,A_packets,0.7687708065401311,0.7687708065401311,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,DoS attacks-Slowloris,A_packets,10285.0,10285.0,0.0,0.0,true
+G1 n_attack vs frozen count,DoS attacks-Slowloris,A_packets,10285.0,10285.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,Bot,A_bytes,0.779423482338003,0.779423482338003,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,Bot,A_bytes,282310.0,282310.0,0.0,0.0,true
+G1 n_attack vs frozen count,Bot,A_bytes,282310.0,282310.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,Bot,A_packets,0.4651573387391668,0.4651573387391668,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,Bot,A_packets,282310.0,282310.0,0.0,0.0,true
+G1 n_attack vs frozen count,Bot,A_packets,282310.0,282310.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,Infilteration,A_bytes,0.5105745210645242,0.5105745210645242,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,Infilteration,A_bytes,161897.0,161897.0,0.0,0.0,true
+G1 n_attack vs frozen count,Infilteration,A_bytes,161897.0,161897.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,Infilteration,A_packets,0.43163249342523985,0.43163249342523985,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,Infilteration,A_packets,161897.0,161897.0,0.0,0.0,true
+G1 n_attack vs frozen count,Infilteration,A_packets,161897.0,161897.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,FTP-BruteForce,A_bytes,0.7086717226129847,0.7086717226129847,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,FTP-BruteForce,A_bytes,39352.0,39352.0,0.0,0.0,true
+G1 n_attack vs frozen count,FTP-BruteForce,A_bytes,39352.0,39352.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,FTP-BruteForce,A_packets,0.2883950216699324,0.2883950216699324,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,FTP-BruteForce,A_packets,39352.0,39352.0,0.0,0.0,true
+G1 n_attack vs frozen count,FTP-BruteForce,A_packets,39352.0,39352.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,SSH-Bruteforce,A_bytes,0.5279308809001698,0.5279308809001698,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,SSH-Bruteforce,A_bytes,117322.0,117322.0,0.0,0.0,true
+G1 n_attack vs frozen count,SSH-Bruteforce,A_bytes,117322.0,117322.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,SSH-Bruteforce,A_packets,0.3702550695142622,0.3702550695142622,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,SSH-Bruteforce,A_packets,117322.0,117322.0,0.0,0.0,true
+G1 n_attack vs frozen count,SSH-Bruteforce,A_packets,117322.0,117322.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,Brute Force -Web,A_bytes,0.7597691328913739,0.7597691328913739,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,Brute Force -Web,A_bytes,611.0,611.0,0.0,0.0,true
+G1 n_attack vs frozen count,Brute Force -Web,A_bytes,611.0,611.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,Brute Force -Web,A_packets,0.7672287791590763,0.7672287791590763,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,Brute Force -Web,A_packets,611.0,611.0,0.0,0.0,true
+G1 n_attack vs frozen count,Brute Force -Web,A_packets,611.0,611.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,Brute Force -XSS,A_bytes,0.44136215260613015,0.44136215260613015,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,Brute Force -XSS,A_bytes,230.0,230.0,0.0,0.0,true
+G1 n_attack vs frozen count,Brute Force -XSS,A_bytes,230.0,230.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,Brute Force -XSS,A_packets,0.8225801149593862,0.8225801149593862,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,Brute Force -XSS,A_packets,230.0,230.0,0.0,0.0,true
+G1 n_attack vs frozen count,Brute Force -XSS,A_packets,230.0,230.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,SQL Injection,A_bytes,0.5076632234270191,0.5076632234270191,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,SQL Injection,A_bytes,87.0,87.0,0.0,0.0,true
+G1 n_attack vs frozen count,SQL Injection,A_bytes,87.0,87.0,0.0,0.0,true
+G1 per-label global-benign AUC vs auc_by_slice.csv,SQL Injection,A_packets,0.6382822842026239,0.6382822842026239,0.0,1e-9,true
+G1 n_attack vs auc_by_slice.csv,SQL Injection,A_packets,87.0,87.0,0.0,0.0,true
+G1 n_attack vs frozen count,SQL Injection,A_packets,87.0,87.0,0.0,0.0,true
+G1 n_benign,global benign,"",13467970.0,13467970.0,0.0,0.0,true
+G2 SECONDARY pooling identity: canonical-row-share value vs direct pooled,DDoS,A_bytes,0.47545481238798376,0.47545481238798376,0.0,1e-9,true
+G2 SECONDARY direct pooled vs n-weighted mean of committed per-label AUCs,DDoS,A_bytes,0.4754548123879837,0.47545481238798376,5.551115123125783e-17,1e-9,true
+G2 SECONDARY pooling identity: canonical-row-share value vs direct pooled,DDoS,A_packets,0.5732349165790748,0.5732349165790748,0.0,1e-9,true
+G2 SECONDARY direct pooled vs n-weighted mean of committed per-label AUCs,DDoS,A_packets,0.5732349165790748,0.5732349165790748,0.0,1e-9,true
+G2 SECONDARY pooling identity: canonical-row-share value vs direct pooled,DoS,A_bytes,0.6687699147758269,0.668769914775827,1.1102230246251565e-16,1e-9,true
+G2 SECONDARY direct pooled vs n-weighted mean of committed per-label AUCs,DoS,A_bytes,0.668769914775827,0.6687699147758269,1.1102230246251565e-16,1e-9,true
+G2 SECONDARY pooling identity: canonical-row-share value vs direct pooled,DoS,A_packets,0.8003643561801108,0.8003643561801109,1.1102230246251565e-16,1e-9,true
+G2 SECONDARY direct pooled vs n-weighted mean of committed per-label AUCs,DoS,A_packets,0.8003643561801109,0.8003643561801108,1.1102230246251565e-16,1e-9,true
+G2 SECONDARY pooling identity: canonical-row-share value vs direct pooled,Brute Force,A_bytes,0.5733277789373853,0.5733277789373853,0.0,1e-9,true
+G2 SECONDARY direct pooled vs n-weighted mean of committed per-label AUCs,Brute Force,A_bytes,0.5733277789373853,0.5733277789373853,0.0,1e-9,true
+G2 SECONDARY pooling identity: canonical-row-share value vs direct pooled,Brute Force,A_packets,0.3496941812828386,0.3496941812828386,0.0,1e-9,true
+G2 SECONDARY direct pooled vs n-weighted mean of committed per-label AUCs,Brute Force,A_packets,0.3496941812828385,0.3496941812828386,5.551115123125783e-17,1e-9,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,DDoS,A_bytes,0.4754548123879837,0.47545481238798376,5.551115123125783e-17,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,DDoS,A_bytes,0.475455,0.47545481238798376,1.8761201625583368e-7,5.00001e-7,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,DDoS,A_packets,0.5732349165790748,0.5732349165790748,0.0,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,DDoS,A_packets,0.5732,0.5732349165790748,0.00003491657907472856,0.000050000001000000005,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,DoS,A_bytes,0.668769914775827,0.6687699147758269,1.1102230246251565e-16,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,DoS,A_bytes,0.6688,0.6687699147758269,0.000030085224173026504,0.000050000001000000005,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,DoS,A_packets,0.8003643561801109,0.8003643561801108,1.1102230246251565e-16,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,DoS,A_packets,0.8004,0.8003643561801108,0.00003564381988918619,0.000050000001000000005,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,Bot,A_bytes,0.779423482338003,0.779423482338003,0.0,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,Bot,A_bytes,0.7794,0.779423482338003,0.000023482338002978054,0.000050000001000000005,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,Bot,A_packets,0.46515733873916676,0.4651573387391668,5.551115123125783e-17,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,Bot,A_packets,0.4652,0.4651573387391668,0.000042661260833187775,0.000050000001000000005,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,Infilteration,A_bytes,0.5105745210645242,0.5105745210645242,0.0,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,Infilteration,A_bytes,0.5106,0.5105745210645242,0.000025478935475886644,0.000050000001000000005,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,Infilteration,A_packets,0.4316324934252399,0.43163249342523985,5.551115123125783e-17,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,Infilteration,A_packets,0.4316,0.43163249342523985,0.00003249342523986565,0.000050000001000000005,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,Brute Force,A_bytes,0.5738582907820332,0.5738582907820331,1.1102230246251565e-16,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,Brute Force,A_bytes,0.5739,0.5738582907820331,0.00004170921796686766,0.000050000001000000005,true
+G3 DIAGNOSTIC direct pooled vs n-weighted mean of committed per-label AUCs,Brute Force,A_packets,0.35200429399621813,0.3520042939962182,5.551115123125783e-17,1e-9,true
+G3 DIAGNOSTIC direct pooled vs value printed in freeze envelope table,Brute Force,A_packets,0.352,0.3520042939962182,4.293996218207585e-6,0.000050000001000000005,true
+G4 capture-matched n vs a3_cicids_labels.csv,Friday-02-03-2018_TrafficForML_CICFlowMeter.csv|Bot,"",282310.0,282310.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-02-03-2018_TrafficForML_CICFlowMeter.csv|Bot,A_bytes,0.8383964538374966,0.8383964538374966,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-02-03-2018_TrafficForML_CICFlowMeter.csv|Bot,A_packets,0.4616141024449022,0.4616141024449022,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Friday-16-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-Hulk,"",434873.0,434873.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-16-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-Hulk,A_bytes,0.023404915758907213,0.023404915758907213,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-16-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-Hulk,A_packets,0.9419032238448123,0.9419032238448123,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Friday-16-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-SlowHTTPTest,"",19462.0,19462.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-16-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-SlowHTTPTest,A_bytes,0.024812326347298685,0.024812326347298685,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-16-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-SlowHTTPTest,A_packets,0.06778080523359296,0.06778080523359296,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Friday-23-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -Web,"",362.0,362.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-23-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -Web,A_bytes,0.8167594889124228,0.8167594889124228,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-23-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -Web,A_packets,0.7894460364039615,0.7894460364039615,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Friday-23-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -XSS,"",151.0,151.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-23-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -XSS,A_bytes,0.4542939360447708,0.4542939360447708,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-23-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -XSS,A_packets,0.7920615988208646,0.7920615988208646,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Friday-23-02-2018_TrafficForML_CICFlowMeter.csv|SQL Injection,"",53.0,53.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-23-02-2018_TrafficForML_CICFlowMeter.csv|SQL Injection,A_bytes,0.5359951961825029,0.5359951961825029,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Friday-23-02-2018_TrafficForML_CICFlowMeter.csv|SQL Injection,A_packets,0.588603955514874,0.588603955514874,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Thuesday-20-02-2018_TrafficForML_CICFlowMeter.csv|DDoS attacks-LOIC-HTTP,"",576191.0,576191.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thuesday-20-02-2018_TrafficForML_CICFlowMeter.csv|DDoS attacks-LOIC-HTTP,A_bytes,0.38127286972499963,0.38127286972499963,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thuesday-20-02-2018_TrafficForML_CICFlowMeter.csv|DDoS attacks-LOIC-HTTP,A_packets,0.45799863645326955,0.45799863645326955,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Thursday-01-03-2018_TrafficForML_CICFlowMeter.csv|Infilteration,"",93040.0,93040.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-01-03-2018_TrafficForML_CICFlowMeter.csv|Infilteration,A_bytes,0.5370911808748153,0.5370911808748153,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-01-03-2018_TrafficForML_CICFlowMeter.csv|Infilteration,A_packets,0.4595985948346254,0.4595985948346254,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Thursday-15-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-GoldenEye,"",41455.0,41455.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-15-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-GoldenEye,A_bytes,0.5099411923617072,0.5099411923617072,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-15-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-GoldenEye,A_packets,0.6122758775387243,0.6122758775387243,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Thursday-15-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-Slowloris,"",10285.0,10285.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-15-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-Slowloris,A_bytes,0.911957005346694,0.911957005346694,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-15-02-2018_TrafficForML_CICFlowMeter.csv|DoS attacks-Slowloris,A_packets,0.7821596930976611,0.7821596930976611,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -Web,"",249.0,249.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -Web,A_bytes,0.7081533193500266,0.7081533193500266,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -Web,A_packets,0.6636532415891898,0.6636532415891898,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -XSS,"",79.0,79.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -XSS,A_bytes,0.4466830079007398,0.4466830079007398,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv|Brute Force -XSS,A_packets,0.7983448791830248,0.7983448791830248,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv|SQL Injection,"",34.0,34.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv|SQL Injection,A_bytes,0.5134211978848108,0.5134211978848108,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv|SQL Injection,A_packets,0.6163956159389594,0.6163956159389594,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv|FTP-BruteForce,"",39352.0,39352.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv|FTP-BruteForce,A_bytes,0.760516334895756,0.760516334895756,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv|FTP-BruteForce,A_packets,0.31384957817591286,0.31384957817591286,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv|SSH-Bruteforce,"",117322.0,117322.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv|SSH-Bruteforce,A_bytes,0.5879175538061722,0.5879175538061722,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv|SSH-Bruteforce,A_packets,0.402004029856847,0.402004029856847,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Wednesday-21-02-2018_TrafficForML_CICFlowMeter.csv|DDOS attack-HOIC,"",668461.0,668461.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-21-02-2018_TrafficForML_CICFlowMeter.csv|DDOS attack-HOIC,A_bytes,0.0005151684739792582,0.0005151684739792582,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-21-02-2018_TrafficForML_CICFlowMeter.csv|DDOS attack-HOIC,A_packets,0.7509339993669176,0.7509339993669176,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Wednesday-21-02-2018_TrafficForML_CICFlowMeter.csv|DDOS attack-LOIC-UDP,"",1730.0,1730.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-21-02-2018_TrafficForML_CICFlowMeter.csv|DDOS attack-LOIC-UDP,A_bytes,1.0,1.0,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-21-02-2018_TrafficForML_CICFlowMeter.csv|DDOS attack-LOIC-UDP,A_packets,1.0,1.0,0.0,1e-9,true
+G4 capture-matched n vs a3_cicids_labels.csv,Wednesday-28-02-2018_TrafficForML_CICFlowMeter.csv|Infilteration,"",68857.0,68857.0,0.0,0.0,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-28-02-2018_TrafficForML_CICFlowMeter.csv|Infilteration,A_bytes,0.4938129271090989,0.4938129271090989,0.0,1e-9,true
+G4 capture-matched AUC vs a3_cicids_labels.csv,Wednesday-28-02-2018_TrafficForML_CICFlowMeter.csv|Infilteration,A_packets,0.5015115146158671,0.5015115146158671,0.0,1e-9,true
