@@ -1,0 +1,207 @@
+{
+  "primary_all_rows": {
+    "verdict": "STRONG REPLICATION",
+    "criterion_A_bytes": "consistent",
+    "criterion_A_packets": "consistent",
+    "H3_dir": {
+      "DDoS/HTTP": {
+        "predicted": "negative",
+        "observed": "negative",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DoS/HTTP": {
+        "predicted": "negative",
+        "observed": "negative",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DDoS/TCP": {
+        "predicted": "negative",
+        "observed": "positive",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      },
+      "DoS/TCP": {
+        "predicted": "negative",
+        "observed": "positive",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      },
+      "DDoS/UDP": {
+        "predicted": "negative",
+        "observed": "positive",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      },
+      "DoS/UDP": {
+        "predicted": "negative",
+        "observed": "positive",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      },
+      "Theft/Keylogging": {
+        "predicted": "positive",
+        "observed": "negative",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      }
+    },
+    "H3_env": {
+      "DDoS/HTTP": {
+        "predicted": "negative",
+        "observed": "negative",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DoS/HTTP": {
+        "predicted": "negative",
+        "observed": "negative",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DDoS/TCP": {
+        "predicted": "positive",
+        "observed": "positive",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DoS/TCP": {
+        "predicted": "positive",
+        "observed": "positive",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DDoS/UDP": {
+        "predicted": "positive",
+        "observed": "positive",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DoS/UDP": {
+        "predicted": "positive",
+        "observed": "positive",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      }
+    },
+    "abandon_H3_env": false,
+    "abandon_H3_dir": false
+  },
+  "sensitivity_dedup": {
+    "verdict": "STRONG REPLICATION",
+    "criterion_A_bytes": "consistent",
+    "criterion_A_packets": "consistent",
+    "H3_dir": {
+      "DDoS/HTTP": {
+        "predicted": "negative",
+        "observed": "negative",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DoS/HTTP": {
+        "predicted": "negative",
+        "observed": "negative",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DDoS/TCP": {
+        "predicted": "negative",
+        "observed": "positive",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      },
+      "DoS/TCP": {
+        "predicted": "negative",
+        "observed": "positive",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      },
+      "DDoS/UDP": {
+        "predicted": "negative",
+        "observed": "positive",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      },
+      "DoS/UDP": {
+        "predicted": "negative",
+        "observed": "positive",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      },
+      "Theft/Keylogging": {
+        "predicted": "positive",
+        "observed": "negative",
+        "confident": true,
+        "held": false,
+        "held_confident": false
+      }
+    },
+    "H3_env": {
+      "DDoS/HTTP": {
+        "predicted": "negative",
+        "observed": "negative",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DoS/HTTP": {
+        "predicted": "negative",
+        "observed": "negative",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DDoS/TCP": {
+        "predicted": "positive",
+        "observed": "positive",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DoS/TCP": {
+        "predicted": "positive",
+        "observed": "positive",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DDoS/UDP": {
+        "predicted": "positive",
+        "observed": "positive",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      },
+      "DoS/UDP": {
+        "predicted": "positive",
+        "observed": "positive",
+        "confident": true,
+        "held": true,
+        "held_confident": true
+      }
+    },
+    "abandon_H3_env": false,
+    "abandon_H3_dir": false,
+    "note": "0 exact duplicates (SS9.1): population identical to primary"
+  }
+}

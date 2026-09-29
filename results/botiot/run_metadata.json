@@ -1,0 +1,22 @@
+{
+  "git_commit": "4554139a7dabaec837f9afe226069a1b60d88d40",
+  "git_dirty": false,
+  "python": "3.11.16",
+  "packages": {
+    "numpy": "2.4.6",
+    "polars": "1.44.1",
+    "matplotlib": "3.11.1",
+    "scikit-learn": "1.9.0"
+  },
+  "data_dir": "C:\\Users\\DavidG\\Downloads\\OneDrive_2026-09-23\\Entire Dataset",
+  "dataset_manifest_sha256": "7cbdad77548d146d550f0ddd172606ed73152fb914743055cfe5c70c297733a7",
+  "names_file": "UNSW_2018_IoT_Botnet_Dataset_Feature_Names.csv",
+  "bootstrap_B": 2000,
+  "bootstrap_seed": 20260922,
+  "near_neutral": 0.05,
+  "role_min": 0.9,
+  "freeze_doc": "docs/methodology/BOTIOT_H3_FREEZE.md",
+  "started_utc": "2026-09-23T06:11:35Z",
+  "dedup_duplicate_rows": 0,
+  "finished_utc": "2026-09-23T06:15:36Z"
+}
