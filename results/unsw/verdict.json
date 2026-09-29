@@ -1,0 +1,24 @@
+{
+  "primary_all_rows": {
+    "verdict": "NO REPLICATION",
+    "criterion_A_bytes": "not met",
+    "criterion_A_packets": "not met",
+    "H3_dir": {
+      "DoS_negative": false,
+      "DoS_negative_confident": false,
+      "Exploits_positive": true,
+      "Exploits_positive_confident": true
+    }
+  },
+  "sensitivity_dedup": {
+    "verdict": "NO REPLICATION",
+    "criterion_A_bytes": "not met",
+    "criterion_A_packets": "not met",
+    "H3_dir": {
+      "DoS_negative": false,
+      "DoS_negative_confident": false,
+      "Exploits_positive": true,
+      "Exploits_positive_confident": true
+    }
+  }
+}

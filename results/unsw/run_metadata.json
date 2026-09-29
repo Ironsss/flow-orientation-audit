@@ -1,0 +1,25 @@
+{
+  "git_commit": "fac0dac2fc8672bb8183a4d78ae240508c52b379",
+  "git_dirty": true,
+  "python": "3.11.16",
+  "packages": {
+    "numpy": "2.4.6",
+    "polars": "1.44.1",
+    "matplotlib": "3.11.1",
+    "scikit-learn": "1.9.0"
+  },
+  "dataset_sha256": {
+    "UNSW-NB15_1.csv": "7d851bbeabd27894ce39c8e78835c73341fc946652fb7743b9eff193b55eb511",
+    "UNSW-NB15_2.csv": "6130ad02873cc6069ae695cf2844f2e8c2e9a9a1b7532dd82ab8f202757cacf8",
+    "UNSW-NB15_3.csv": "ae990a96c3dfcd425ce2801aadb1727a34d5e0ae6d8215dbcdae60dedfaef640",
+    "UNSW-NB15_4.csv": "cdf563692d51d405541dd659ddcdad9fa01f001f05fe9fc4b67f00ca12fbc96a",
+    "NUSW-NB15_GT.csv": "6d27542cb6457db599e0a78274ac141fec0296531f00ac5569551a276c5ab1a8"
+  },
+  "bootstrap_B": 2000,
+  "bootstrap_seed": 20260922,
+  "near_neutral": 0.05,
+  "role_min": 0.9,
+  "freeze_doc": "docs/methodology/UNSW_EXTERNAL_VALIDATION_FREEZE.md",
+  "started_utc": "2026-09-23T04:01:38Z",
+  "finished_utc": "2026-09-23T04:06:30Z"
+}

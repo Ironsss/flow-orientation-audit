@@ -1,0 +1,68 @@
+{
+  "primary_all_rows": {
+    "rows": 2540047,
+    "benign": 2218764,
+    "attack": 321283,
+    "per_category": {
+      "Generic": 215481,
+      "Worms": 174,
+      "DoS": 16353,
+      "Analysis": 2677,
+      "Exploits": 44525,
+      "Shellcode": 1511,
+      "Fuzzers": 24246,
+      "Reconnaissance": 13987,
+      "Backdoors": 2329
+    },
+    "null_counts": {
+      "timestamp": 0,
+      "src_ip": 0,
+      "dst_ip": 0,
+      "src_port": 2,
+      "dst_port": 7,
+      "fwd_bytes": 0,
+      "bwd_bytes": 0,
+      "fwd_packets": 0,
+      "bwd_packets": 0,
+      "label": 0,
+      "attack_category": 2218764,
+      "dataset": 0
+    }
+  },
+  "sensitivity_dedup": {
+    "rows": 2059414,
+    "benign": 1959771,
+    "attack": 99643,
+    "per_category": {
+      "DoS": 5665,
+      "Worms": 171,
+      "Generic": 25378,
+      "Backdoors": 1983,
+      "Fuzzers": 21795,
+      "Shellcode": 1511,
+      "Analysis": 2184,
+      "Exploits": 27599,
+      "Reconnaissance": 13357
+    },
+    "null_counts": {
+      "timestamp": 0,
+      "src_ip": 0,
+      "dst_ip": 0,
+      "src_port": 2,
+      "dst_port": 7,
+      "fwd_bytes": 0,
+      "bwd_bytes": 0,
+      "fwd_packets": 0,
+      "bwd_packets": 0,
+      "label": 0,
+      "attack_category": 1959771,
+      "dataset": 0
+    }
+  },
+  "attacker_ips_from_GT": [
+    "175.45.176.0",
+    "175.45.176.1",
+    "175.45.176.2",
+    "175.45.176.3"
+  ]
+}
