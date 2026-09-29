@@ -1,0 +1,205 @@
+dataset,group,feature,slice,n_attack,n_benign,auc_signed
+unsw,Analysis,A_bytes,all,2677,2218764,0.7964724295843102
+unsw,Analysis,A_bytes,answered,630,1980405,0.5058253424433827
+unsw,Analysis,A_bytes,unanswered,2047,238359,0.09377038784729344
+unsw,Analysis,A_packets,all,2677,2218764,0.9017491365037991
+unsw,Analysis,A_packets,answered,630,1980405,0.8421164746524711
+unsw,Analysis,A_packets,unanswered,2047,238359,0.5186912981277602
+unsw,Backdoors,A_bytes,all,2329,2218764,0.8654352955916282
+unsw,Backdoors,A_bytes,answered,386,1980405,0.7286292810023826
+unsw,Backdoors,A_bytes,unanswered,1943,238359,0.14511819349499405
+unsw,Backdoors,A_packets,all,2329,2218764,0.9137770255284671
+unsw,Backdoors,A_packets,answered,386,1980405,0.818781095215608
+unsw,Backdoors,A_packets,unanswered,1943,238359,0.538763246649731
+unsw,DoS,A_bytes,all,16353,2218764,0.8409997980354
+unsw,DoS,A_bytes,answered,3646,1980405,0.6781189743954684
+unsw,DoS,A_bytes,unanswered,12707,238359,0.14893909603041536
+unsw,DoS,A_packets,all,16353,2218764,0.8981425569071579
+unsw,DoS,A_packets,answered,3646,1980405,0.7981754728651715
+unsw,DoS,A_packets,unanswered,12707,238359,0.5350573639558691
+unsw,Exploits,A_bytes,all,44525,2218764,0.6787668189140488
+unsw,Exploits,A_bytes,answered,28102,1980405,0.6078180463878423
+unsw,Exploits,A_bytes,unanswered,16423,238359,0.17708147735834365
+unsw,Exploits,A_packets,all,44525,2218764,0.7404712287467259
+unsw,Exploits,A_packets,answered,28102,1980405,0.6857967533593897
+unsw,Exploits,A_packets,unanswered,16423,238359,0.542875726486237
+unsw,Fuzzers,A_bytes,all,24246,2218764,0.8425716120677927
+unsw,Fuzzers,A_bytes,answered,15503,1980405,0.88274420891474
+unsw,Fuzzers,A_bytes,unanswered,8743,238359,0.4323722436489821
+unsw,Fuzzers,A_packets,all,24246,2218764,0.8809896986932341
+unsw,Fuzzers,A_packets,answered,15503,1980405,0.9349558840343893
+unsw,Fuzzers,A_packets,unanswered,8743,238359,0.5394525043635444
+unsw,Generic,A_bytes,all,215481,2218764,0.8913158763261384
+unsw,Generic,A_bytes,answered,3247,1980405,0.5605881670788118
+unsw,Generic,A_bytes,unanswered,212234,238359,0.045128896876359306
+unsw,Generic,A_packets,all,215481,2218764,0.9393531317286185
+unsw,Generic,A_packets,answered,3247,1980405,0.6141917521145016
+unsw,Generic,A_packets,unanswered,212234,238359,0.4959301438467839
+unsw,Reconnaissance,A_bytes,all,13987,2218764,0.8289652318097788
+unsw,Reconnaissance,A_bytes,answered,7017,1980405,0.8480761884918061
+unsw,Reconnaissance,A_bytes,unanswered,6970,238359,0.08278021133296139
+unsw,Reconnaissance,A_packets,all,13987,2218764,0.8820591966482271
+unsw,Reconnaissance,A_packets,answered,7017,1980405,0.9156072289123429
+unsw,Reconnaissance,A_packets,unanswered,6970,238359,0.5121596254779428
+unsw,Shellcode,A_bytes,all,1511,2218764,0.8777546325566697
+unsw,Shellcode,A_bytes,answered,750,1980405,0.9085191022375053
+unsw,Shellcode,A_bytes,unanswered,761,238359,0.4754433482740251
+unsw,Shellcode,A_packets,all,1511,2218764,0.8966447900749951
+unsw,Shellcode,A_packets,answered,750,1980405,0.9493132095034433
+unsw,Shellcode,A_packets,unanswered,761,238359,0.49546272639170325
+unsw,Worms,A_bytes,all,174,2218764,0.7085536473066282
+unsw,Worms,A_bytes,answered,153,1980405,0.7544378499327553
+unsw,Worms,A_bytes,unanswered,21,238359,0.6711521975955037
+unsw,Worms,A_packets,all,174,2218764,0.7237796480434577
+unsw,Worms,A_packets,answered,153,1980405,0.7759584694442493
+unsw,Worms,A_packets,unanswered,21,238359,0.49546272639170325
+botiot,DDoS/HTTP,A_bytes,all,19771,9543,0.3196636407753192
+botiot,DDoS/HTTP,A_bytes,answered,19769,4514,0.6757226795809723
+botiot,DDoS/HTTP,A_bytes,unanswered,2,5029,0.3732352356333267
+botiot,DDoS/HTTP,A_packets,all,19771,9543,0.4601737309144541
+botiot,DDoS/HTTP,A_packets,answered,19769,4514,0.9662528376877884
+botiot,DDoS/HTTP,A_packets,unanswered,2,5029,0.5336548021475442
+botiot,DDoS/TCP,A_bytes,all,19547603,9543,0.7028944362436889
+botiot,DDoS/TCP,A_bytes,answered,5103403,4514,0.9530822084607435
+botiot,DDoS/TCP,A_bytes,unanswered,14444200,5029,0.6052161966141856
+botiot,DDoS/TCP,A_packets,all,19547603,9543,0.7135096785330032
+botiot,DDoS/TCP,A_packets,answered,5103403,4514,0.9854139942273662
+botiot,DDoS/TCP,A_packets,unanswered,14444200,5029,0.5545420114518964
+botiot,DDoS/UDP,A_bytes,all,18965106,9543,0.7850674050884495
+botiot,DDoS/UDP,A_bytes,answered,406,4514,0.7803014594987462
+botiot,DDoS/UDP,A_bytes,unanswered,18964700,5029,0.5921621056083912
+botiot,DDoS/UDP,A_packets,all,18965106,9543,0.8101815342424165
+botiot,DDoS/UDP,A_packets,answered,406,4514,0.6071957849798438
+botiot,DDoS/UDP,A_packets,unanswered,18964700,5029,0.6398245222241102
+botiot,DoS/HTTP,A_bytes,all,29706,9543,0.3399518695842823
+botiot,DoS/HTTP,A_bytes,answered,29704,4514,0.7186192310877456
+botiot,DoS/HTTP,A_bytes,unanswered,2,5029,0.6732948896400875
+botiot,DoS/HTTP,A_packets,all,29706,9543,0.4557392140133531
+botiot,DoS/HTTP,A_packets,answered,29704,4514,0.9574889239462206
+botiot,DoS/HTTP,A_packets,unanswered,2,5029,0.6850268443030424
+botiot,DoS/TCP,A_bytes,all,12315997,9543,0.6277890148389019
+botiot,DoS/TCP,A_bytes,answered,6152453,4514,0.937554822488455
+botiot,DoS/TCP,A_bytes,unanswered,6163544,5029,0.6428104335320304
+botiot,DoS/TCP,A_packets,all,12315997,9543,0.6461554360371952
+botiot,DoS/TCP,A_packets,answered,6152453,4514,0.9924603127493383
+botiot,DoS/TCP,A_packets,unanswered,6163544,5029,0.615315189424374
+botiot,DoS/UDP,A_bytes,all,20659491,9543,0.7893828172448694
+botiot,DoS/UDP,A_bytes,answered,537,4514,0.7748366555033832
+botiot,DoS/UDP,A_bytes,unanswered,20658954,5029,0.6003549654370263
+botiot,DoS/UDP,A_packets,all,20659491,9543,0.8098067371481624
+botiot,DoS/UDP,A_packets,answered,537,4514,0.5933060315558714
+botiot,DoS/UDP,A_packets,unanswered,20658954,5029,0.6391198113591101
+botiot,Recon/OS fingerprint,A_bytes,all,358275,9543,0.3548262238401428
+botiot,Recon/OS fingerprint,A_bytes,answered,345635,4514,0.7382679724697991
+botiot,Recon/OS fingerprint,A_bytes,unanswered,12640,5029,0.0669750887888223
+botiot,Recon/OS fingerprint,A_packets,all,358275,9543,0.24537225988690775
+botiot,Recon/OS fingerprint,A_packets,answered,345635,4514,0.49662985119456665
+botiot,Recon/OS fingerprint,A_packets,unanswered,12640,5029,0.1107579362482412
+botiot,Recon/Service scan,A_bytes,all,1463364,9543,0.359947747916099
+botiot,Recon/Service scan,A_bytes,answered,1378580,4514,0.744904787729764
+botiot,Recon/Service scan,A_bytes,unanswered,84784,5029,0.019788844488717653
+botiot,Recon/Service scan,A_packets,all,1463364,9543,0.25237558498175056
+botiot,Recon/Service scan,A_packets,answered,1378580,4514,0.4986497977091143
+botiot,Recon/Service scan,A_packets,unanswered,84784,5029,0.06753794002522677
+botiot,Theft/Data theft,A_bytes,all,118,9543,0.2825205093093349
+botiot,Theft/Data theft,A_bytes,answered,118,4514,0.5847758010858872
+botiot,Theft/Data theft,A_bytes,unanswered,0,5029,
+botiot,Theft/Data theft,A_packets,all,118,9543,0.08392743283301098
+botiot,Theft/Data theft,A_packets,answered,118,4514,0.17109200753963189
+botiot,Theft/Data theft,A_packets,unanswered,0,5029,
+botiot,Theft/Keylogging,A_bytes,all,1469,9543,0.41097495218339947
+botiot,Theft/Keylogging,A_bytes,answered,1469,4514,0.8688378309007934
+botiot,Theft/Keylogging,A_bytes,unanswered,0,5029,
+botiot,Theft/Keylogging,A_packets,all,1469,9543,0.22355695445223148
+botiot,Theft/Keylogging,A_packets,answered,1469,4514,0.47261940991086504
+botiot,Theft/Keylogging,A_packets,unanswered,0,5029,
+cicids,Bot,A_bytes,all,282310,13467970,0.779423482338003
+cicids,Bot,A_bytes,answered,142865,9391594,0.8927012309254607
+cicids,Bot,A_bytes,unanswered,139445,4076376,0.3829778754402483
+cicids,Bot,A_packets,all,282310,13467970,0.4651573387391668
+cicids,Bot,A_packets,answered,143014,10777050,0.08311375377830559
+cicids,Bot,A_packets,unanswered,139296,2690920,0.3726398744122051
+cicids,Brute Force -Web,A_bytes,all,611,13467970,0.7597691328913739
+cicids,Brute Force -Web,A_bytes,answered,268,9391594,0.8284928571914194
+cicids,Brute Force -Web,A_bytes,unanswered,343,4076376,0.6089795175410508
+cicids,Brute Force -Web,A_packets,all,611,13467970,0.7672287791590763
+cicids,Brute Force -Web,A_packets,answered,272,10777050,0.7137448172478171
+cicids,Brute Force -Web,A_packets,unanswered,339,2690920,0.6234497422929606
+cicids,Brute Force -XSS,A_bytes,all,230,13467970,0.44136215260613015
+cicids,Brute Force -XSS,A_bytes,answered,113,9391594,0.2212618162601257
+cicids,Brute Force -XSS,A_bytes,unanswered,117,4076376,0.403764348319512
+cicids,Brute Force -XSS,A_packets,all,230,13467970,0.8225801149593862
+cicids,Brute Force -XSS,A_packets,answered,114,10777050,0.8984285038943622
+cicids,Brute Force -XSS,A_packets,unanswered,116,2690920,0.6230483536716324
+cicids,DDOS attack-HOIC,A_bytes,all,668461,13467970,0.5765006460287126
+cicids,DDOS attack-HOIC,A_bytes,answered,163750,9391594,0.24252908662886835
+cicids,DDOS attack-HOIC,A_bytes,unanswered,504711,4076376,0.382705618912485
+cicids,DDOS attack-HOIC,A_packets,all,668461,13467970,0.6711738153882112
+cicids,DDOS attack-HOIC,A_packets,answered,163750,10777050,0.05699825091281937
+cicids,DDOS attack-HOIC,A_packets,unanswered,504711,2690920,0.37150231147711565
+cicids,DDOS attack-LOIC-UDP,A_bytes,all,1730,13467970,0.9999997022264956
+cicids,DDOS attack-LOIC-UDP,A_bytes,answered,0,9391594,
+cicids,DDOS attack-LOIC-UDP,A_bytes,unanswered,1730,4076376,0.9999990161838299
+cicids,DDOS attack-LOIC-UDP,A_packets,all,1730,13467970,0.9999999751283157
+cicids,DDOS attack-LOIC-UDP,A_packets,answered,0,10777050,
+cicids,DDOS attack-LOIC-UDP,A_packets,unanswered,1730,2690920,0.999999875518002
+cicids,DDoS attacks-LOIC-HTTP,A_bytes,all,576191,13467970,0.3566527803174795
+cicids,DDoS attacks-LOIC-HTTP,A_bytes,answered,289289,9391594,0.009659489113349662
+cicids,DDoS attacks-LOIC-HTTP,A_bytes,unanswered,286902,4076376,0.38442039261668076
+cicids,DDoS attacks-LOIC-HTTP,A_packets,all,576191,13467970,0.4583309389255808
+cicids,DDoS attacks-LOIC-HTTP,A_packets,answered,289289,10777050,0.05699825091281937
+cicids,DDoS attacks-LOIC-HTTP,A_packets,unanswered,286902,2690920,0.3732602936878421
+cicids,DoS attacks-GoldenEye,A_bytes,all,41455,13467970,0.46683955906850455
+cicids,DoS attacks-GoldenEye,A_bytes,answered,26807,9391594,0.45033066689178125
+cicids,DoS attacks-GoldenEye,A_bytes,unanswered,14648,4076376,0.4230097683388808
+cicids,DoS attacks-GoldenEye,A_packets,all,41455,13467970,0.5938401684740104
+cicids,DoS attacks-GoldenEye,A_packets,answered,27772,10777050,0.5672921328010355
+cicids,DoS attacks-GoldenEye,A_packets,unanswered,13683,2690920,0.37150231147711565
+cicids,DoS attacks-Hulk,A_bytes,all,434873,13467970,0.6806707651872218
+cicids,DoS attacks-Hulk,A_bytes,answered,25548,9391594,0.3292649205332112
+cicids,DoS attacks-Hulk,A_bytes,unanswered,409325,4076376,0.382705618912485
+cicids,DoS attacks-Hulk,A_packets,all,434873,13467970,0.8437111425927892
+cicids,DoS attacks-Hulk,A_packets,answered,25548,10777050,0.15712156515144304
+cicids,DoS attacks-Hulk,A_packets,unanswered,409325,2690920,0.4434457713311928
+cicids,DoS attacks-SlowHTTPTest,A_bytes,all,19462,13467970,0.7086717226129847
+cicids,DoS attacks-SlowHTTPTest,A_bytes,answered,0,9391594,
+cicids,DoS attacks-SlowHTTPTest,A_bytes,unanswered,19462,4076376,0.382705618912485
+cicids,DoS attacks-SlowHTTPTest,A_packets,all,19462,13467970,0.2883950216699324
+cicids,DoS attacks-SlowHTTPTest,A_packets,answered,19462,10777050,0.3604043314265035
+cicids,DoS attacks-SlowHTTPTest,A_packets,unanswered,0,2690920,
+cicids,DoS attacks-Slowloris,A_bytes,all,10285,13467970,0.9039760781949582
+cicids,DoS attacks-Slowloris,A_bytes,answered,142,9391594,0.28443627279434636
+cicids,DoS attacks-Slowloris,A_bytes,unanswered,10143,4076376,0.7956275137285643
+cicids,DoS attacks-Slowloris,A_packets,all,10285,13467970,0.7687708065401311
+cicids,DoS attacks-Slowloris,A_packets,answered,7947,10777050,0.7647338480510476
+cicids,DoS attacks-Slowloris,A_packets,unanswered,2338,2690920,0.8279466494851226
+cicids,FTP-BruteForce,A_bytes,all,39352,13467970,0.7086717226129847
+cicids,FTP-BruteForce,A_bytes,answered,0,9391594,
+cicids,FTP-BruteForce,A_bytes,unanswered,39352,4076376,0.382705618912485
+cicids,FTP-BruteForce,A_packets,all,39352,13467970,0.2883950216699324
+cicids,FTP-BruteForce,A_packets,answered,39352,10777050,0.3604043314265035
+cicids,FTP-BruteForce,A_packets,unanswered,0,2690920,
+cicids,Infilteration,A_bytes,all,161897,13467970,0.5105745210645242
+cicids,Infilteration,A_bytes,answered,90956,9391594,0.43598958796011117
+cicids,Infilteration,A_bytes,unanswered,70941,4076376,0.4705528040301573
+cicids,Infilteration,A_packets,all,161897,13467970,0.43163249342523985
+cicids,Infilteration,A_packets,answered,136750,10777050,0.4283655274276173
+cicids,Infilteration,A_packets,unanswered,25147,2690920,0.5731752585478639
+cicids,Label,A_bytes,all,3,13467970,1.0
+cicids,Label,A_bytes,answered,0,9391594,
+cicids,Label,A_bytes,unanswered,3,4076376,1.0
+cicids,Label,A_packets,all,3,13467970,1.0
+cicids,Label,A_packets,answered,0,10777050,
+cicids,Label,A_packets,unanswered,3,2690920,1.0
+cicids,SQL Injection,A_bytes,all,87,13467970,0.5076632234270191
+cicids,SQL Injection,A_bytes,answered,48,9391594,0.41767013938208997
+cicids,SQL Injection,A_bytes,unanswered,39,4076376,0.382705618912485
+cicids,SQL Injection,A_packets,all,87,13467970,0.6382822842026239
+cicids,SQL Injection,A_packets,answered,58,10777050,0.6502843294555208
+cicids,SQL Injection,A_packets,unanswered,29,2690920,0.37150231147711565
+cicids,SSH-Bruteforce,A_bytes,all,117322,13467970,0.5279308809001698
+cicids,SSH-Bruteforce,A_bytes,answered,93818,9391594,0.692142342935178
+cicids,SSH-Bruteforce,A_bytes,unanswered,23504,4076376,0.382705618912485
+cicids,SSH-Bruteforce,A_packets,all,117322,13467970,0.3702550695142622
+cicids,SSH-Bruteforce,A_packets,answered,117317,10777050,0.4626771651512916
+cicids,SSH-Bruteforce,A_packets,unanswered,5,2690920,0.37150231147711565
