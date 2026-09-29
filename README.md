@@ -1,6 +1,6 @@
 # signed-flow-orientation
 
-Code, frozen plans, outputs and manuscript for the study **"Signed Directional Flow Asymmetry Is a Relational Measurement, Not an Attack Attribute: Preregistered Tests and Robustness Audits in Network Intrusion Detection"**.
+Code, frozen plans, outputs and manuscript for the study **"The Sign of Directional Flow Asymmetry Depends on the Benign Reference and the Measurement Pipeline: Preregistered Tests and Robustness Audits in Network Intrusion Detection"**.
 
 The study examines a fixed, interpretable directional flow feature,
 
