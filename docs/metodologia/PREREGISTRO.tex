@@ -1,0 +1,230 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+
+\definecolor{crit}{RGB}{155,25,25}
+\definecolor{warn}{RGB}{180,110,0}
+\definecolor{good}{RGB}{20,110,60}
+\definecolor{hdr}{RGB}{30,55,105}
+
+\titleformat{\section}{\normalfont\large\bfseries\color{hdr}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries\color{hdr}}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\textit{Preregistro experimental}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newtcolorbox{cbox}[2]{colback=#1!5,colframe=#1,fonttitle=\bfseries,title={#2},
+  boxrule=0.9pt,left=5pt,right=5pt,top=4pt,bottom=4pt}
+
+\title{\textbf{\Large Preregistro experimental}\\[3pt]
+\normalsize Qué pregunta queremos responder, y cómo sabríamos que la respondimos}
+\author{\normalsize Repositorio \code{Ironsss/iag-symmetry}}
+\date{\small 2026-08-27}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\vspace{-1.2em}
+
+% ============================================================
+\section{El diagnóstico: qué faltaba}
+% ============================================================
+
+El proyecto ha producido un índice, una revisión crítica, un replanteamiento y un protocolo de auditoría. Lo que no ha producido nunca es una \textbf{pregunta enunciada de forma que las respuestas posibles sean enumerables}, con una hipótesis que pueda fallar, una operacionalización, controles, y un criterio de decisión declarado antes de medir.
+
+El patrón ha sido consistente y es el problema de fondo: \emph{primero se construye un artefacto, después se busca qué significa}. Una metodología real invierte ese orden. Este documento lo invierte.
+
+% ============================================================
+\section{La evidencia de que esto importa: un confound producido hoy}
+% ============================================================
+
+Antes de escribir nada, se corrió el diagnóstico más barato posible: \emph{¿existe margen que estudiar en el régimen donde la asimetría per-flujo falla?} El resultado:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Conjunto de features & AUC \\
+\midrule
+per-flujo asimetría (baseline) & 0.6863 \\
+$+$ tamaño de grafo & 1.0000 \\
+$+$ IAG (relacional) & 1.0000 \\
+solo IAG & 1.0000 \\
+\rowcolor{crit!12} solo tamaño de grafo (\code{n\_nodes}, \code{n\_edges}) & \textbf{1.0000} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La última fila es el resultado. Dos enteros, sin ninguna relación con la asimetría, separan las clases perfectamente. La causa, verificada:
+
+\begin{center}
+\code{n\_nodes} en positivos: $51$ exacto \quad$\cdot$\quad en negativos: $50$ exacto \quad$\cdot$\quad \textbf{cero solapamiento}
+\end{center}
+
+Los positivos venían de corridas de infiltración y los negativos de corridas benignas \emph{separadas}. Las corridas de ataque tienen hosts atacantes extra. \code{n\_nodes} separa las \textbf{corridas}, no los \textbf{ataques}.
+
+\begin{cbox}{crit}{Lo que casi se reporta}
+Sin la fila de control ``solo tamaño'', la lectura natural de esa tabla habría sido: \emph{``el IAG alcanza AUC 1.0000 en el régimen sigiloso donde la asimetría per-flujo solo llega a 0.69''}. Un hallazgo espectacular, publicable, y completamente falso.
+
+\medskip
+El control estaba ahí por costumbre, no por diseño. Eso es precisamente la diferencia entre tener método y no tenerlo, y es la justificación de todo lo que sigue.
+\end{cbox}
+
+El diagnóstico, entonces, \textbf{no respondió la pregunta}. Demostró que el diseño era inválido. Ese es el punto de partida honesto.
+
+% ============================================================
+\section{La pregunta, derivada de lo medido}
+% ============================================================
+
+No se propone: se deriva de lo que el propio repositorio ya midió.
+
+\textbf{Lo establecido.} La asimetría direccional per-flujo --- un solo escalar, $\log(1+\text{bytes}_\rightarrow) - \log(1+\text{bytes}_\leftarrow)$, sin grafo --- alcanza AUC $0.998$ en escaneo de puertos y $0.946$ en DDoS, y cae a $0.587$--$0.686$ en infiltración. Además, 24 de las 49 features ``clásicas'' de CICIDS ya son direccionales.
+
+\textbf{El hueco.} Los ataques ruidosos ya los detecta cualquier cosa. Donde la detección importa --- y donde hay margen --- es el régimen sigiloso, y ahí la señal per-flujo está cerca del azar.
+
+\begin{cbox}{hdr}{Pregunta}
+\textbf{¿La asimetría medida a nivel \emph{relacional} aporta información de detección que las features direccionales \emph{per-flujo} no aportan ya, específicamente en el régimen donde las per-flujo fallan?}
+\end{cbox}
+
+Las respuestas posibles son enumerables: sí (con una magnitud), no, o ``no se puede saber con estos datos''. Las tres son resultados; la segunda es publicable; la tercera obliga a arreglar el instrumento.
+
+% ============================================================
+\section{Preregistro}
+% ============================================================
+
+Todo lo de esta sección se fija \textbf{antes} de correr el experimento. Un umbral elegido después de ver los números no es un criterio.
+
+\subsection{Hipótesis y predicciones}
+
+\textbf{H1.} En el estrato sigiloso (definido como aquel donde el baseline per-flujo obtiene AUC $\le 0.75$), agregar features relacionales produce una mejora $\Delta \text{AUC} \ge 0.05$ sobre el baseline.
+
+\emph{Si H1 es cierta:} $\Delta \ge 0.05$, el intervalo de confianza excluye $0$, y la mejora \textbf{sobrevive a los cinco controles} de \S4.3.
+
+\emph{Si H1 es falsa:} $\Delta < 0.05$, o el IC incluye $0$, o un control absorbe la mejora. Resultado negativo, informativo, y cierra la línea relacional.
+
+\subsection{Operacionalización}
+
+\begin{itemize}[leftmargin=1.3em,itemsep=1pt]
+  \item \textbf{Unidad:} ventana temporal de 60\,s.
+  \item \textbf{Etiqueta:} $y = 1$ si $\text{attack\_ratio} \ge \tau$, con $\tau = 0.01$ declarado, y sensibilidad reportada para $\tau \in \{0.005, 0.01, 0.05\}$.
+  \item \textbf{Baseline:} estadísticos resumen del log-ratio direccional per-flujo dentro de la ventana (media, desv., p90, p99, fracción $>1$).
+  \item \textbf{Tratamiento:} baseline $+$ features relacionales.
+  \item \textbf{Métrica:} AUC y PR-AUC. IC 95\% bootstrap sobre la \emph{diferencia pareada}, no sobre cada AUC por separado.
+\end{itemize}
+
+\subsection{Controles --- cada uno descarta una explicación alternativa concreta}
+
+\begin{center}
+\begin{tabular}{clp{7.4cm}}
+\toprule
+& \textbf{Control} & \textbf{Explicación alternativa que descarta} \\
+\midrule
+C1 & Solo tamaño de grafo & ``El grafo es más grande'', no más asimétrico. \cellcolor{crit!8}\textbf{Es el que atrapó el confound de \S2.} \\
+C2 & Diseño intra-corrida & Positivos y negativos de la \emph{misma} corrida, misma población de nodos. Descarta todo artefacto de configuración. \\
+C3 & Per-flujo no-direccionales & ``Más features ayudan'', independientemente de que midan asimetría. \\
+C4 & Ventanas degeneradas excluidas & Artefactos de borde (la ventana de 4 nodos y 2 aristas que ya invalidó H1 una vez). \\
+C5 & Umbral de etiqueta declarado & Que el resultado dependa de dónde se puso $\tau$. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{C2 es la corrección directa al error de \S2} y la más importante: mientras las clases provengan de corridas distintas, cualquier diferencia de configuración es un predictor perfecto.
+
+\subsection{Regla de decisión}
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
+  \item $\Delta \ge 0.05$, IC excluye $0$, y la mejora de C1 es menor a la mitad de la del tratamiento $\Rightarrow$ \textbf{H1 sostenida}.
+  \item $\Delta < 0.05$ o IC incluye $0$ $\Rightarrow$ \textbf{H1 rechazada}. La asimetría relacional no aporta aquí. Se reporta como negativo.
+  \item C1 explica la mayor parte de la mejora $\Rightarrow$ \textbf{confounded}. No se reporta; se rediseña.
+\end{enumerate}
+
+\subsection{Potencia}
+
+Medida por simulación sobre la diferencia de AUC, con baseline $0.69$:
+
+\begin{center}
+\begin{tabular}{rccc}
+\toprule
+$n$ por clase & $\Delta = 0.05$ & $\Delta = 0.10$ & $\Delta = 0.15$ \\
+\midrule
+50   & 77\% & 94\% & 100\% \\
+100  & 85\% & 97\% & 100\% \\
+\rowcolor{good!10} 250  & \textbf{95\%} & 100\% & 100\% \\
+500  & 98\% & 100\% & 100\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Requisito: $\ge 250$ ventanas por clase por estrato.} El experimento de \S2 tenía 60 por clase en test --- insuficiente incluso si el diseño hubiera sido válido. (Estimación de muestras independientes; una comparación pareada requiere menos, así que $250$ es conservador.)
+
+% ============================================================
+\section{¿Es ejecutable hoy? No --- y ahora se sabe exactamente por qué}
+% ============================================================
+
+El requisito de Fase 0 deja de ser ``arreglar el simulador'', que nunca estuvo especificado, y pasa a ser una lista derivada del diseño:
+
+\begin{center}
+\begin{tabular}{lcp{5.6cm}}
+\toprule
+\textbf{Requisito} & \textbf{Estado} & \textbf{Origen} \\
+\midrule
+Positivos y negativos intra-corrida & \cellcolor{crit!12}\textbf{violado} & C2 --- causa directa del confound de \S2 \\
+Estrato sigiloso existente (AUC $0.6$--$0.75$) & \cellcolor{good!12}cumplido & medido: $0.686$ en infiltración \\
+$\ge 250$ ventanas/clase/estrato & \cellcolor{crit!12}\textbf{violado} & potencia; hoy se obtienen $\sim 60$ \\
+\code{attack\_ratio} cruzando $\tau$ & \cellcolor{crit!12}\textbf{violado} & mediana $0.926$; casi todo es $\sim 1$ o $0$ \\
+Sin efecto techo en el baseline & \cellcolor{warn!12}parcial & falla en brute force (AUC $1.0$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{cbox}{good}{Por qué esto es progreso y no otra postergación}
+Las tres sesiones anteriores dijeron ``el simulador está roto'' sin poder decir \emph{en qué sentido} ni \emph{cuándo estaría arreglado}. Ahora hay cinco criterios de aceptación, cada uno derivado de un requisito del diseño experimental, cada uno verificable con una consulta.
+
+\medskip
+El generador ya no persigue realismo --- persigue estas cinco propiedades. Es una tarea de ingeniería acotada, no un problema de investigación abierto.
+\end{cbox}
+
+% ============================================================
+\section{Dónde encaja el protocolo de auditoría}
+% ============================================================
+
+Queda claro su rol, que hasta ahora era ambiguo: \textbf{es el instrumento, no la contribución}.
+
+Con 24 de 49 features direccionales correlacionadas entre sí, cualquier atribución ingenua sobre el resultado de este experimento daría la respuesta equivocada --- exactamente el colapso medido en \code{docs/protocolo/}. El protocolo existe porque la pregunta lo necesita para ser respondida, no al revés.
+
+Si H1 se rechaza, el resultado publicable es doble: el negativo (la asimetría relacional no aporta sobre la per-flujo en el régimen que importa) más el instrumento que permitió establecerlo sin equivocarse.
+
+% ============================================================
+\section{Qué haría abandonar esta línea}
+% ============================================================
+
+Declarado ahora, para que no se decida después con los resultados a la vista:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=1pt]
+  \item H1 rechazada con potencia adecuada ($n \ge 250$/clase) y controles limpios $\Rightarrow$ la línea relacional se cierra. Se reporta el negativo.
+  \item El generador no alcanza los cinco criterios de \S5 en un esfuerzo acotado $\Rightarrow$ el bloqueante pasa a ser datos reales, declarado como único, y el proyecto se detiene ahí hasta conseguirlos.
+  \item Un cuarto confound no anticipado sobrevive a los cinco controles $\Rightarrow$ el instrumento no es de fiar para esta pregunta y hay que cambiar de diseño, no de features.
+\end{itemize}
+
+\vspace{0.4em}
+\begin{cbox}{hdr}{Estado}
+Este documento no reporta ningún resultado sobre H1, porque el experimento no se ha corrido y no puede correrse todavía. Lo único que reporta es un confound propio, encontrado por un control, en un diagnóstico que no debía haberse construido así.
+
+\medskip
+Esa es la diferencia entre este documento y los tres anteriores: los otros presentaban hallazgos y buscaban su marco. Éste fija el marco y declara que no hay hallazgos aún.
+\end{cbox}
+
+\end{document}

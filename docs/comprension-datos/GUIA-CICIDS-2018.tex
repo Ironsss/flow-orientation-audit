@@ -1,0 +1,274 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+
+\definecolor{crit}{RGB}{155,25,25}
+\definecolor{warn}{RGB}{180,110,0}
+\definecolor{good}{RGB}{20,110,60}
+\definecolor{hdr}{RGB}{30,55,105}
+
+\titleformat{\section}{\normalfont\Large\bfseries\color{hdr}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{hdr}}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{Guía de comprensión de datos -- CICIDS-2018}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\code}[1]{\texttt{\small #1}}
+
+\newtcolorbox{cbox}[2]{colback=#1!5,colframe=#1,fonttitle=\bfseries,title={#2},
+  boxrule=0.9pt,left=5pt,right=5pt,top=4pt,bottom=4pt}
+
+\title{\textbf{\Large Guía de comprensión de datos}\\[4pt]
+\Large \textit{Qué es CICIDS-2018, cómo se lee, y qué te va a morder}\\[8pt]
+\normalsize Para alguien que nunca vio este dataset}
+\author{Repositorio \code{Ironsss/iag-symmetry}}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{cbox}{hdr}{Para quién es esto}
+Este documento asume que no conocés CICIDS-2018. No busca hallazgos de investigación
+--- eso está en \code{docs/datos-reales/ANALISIS-DATOS-REALES.pdf} --- busca que puedas
+abrir un archivo de \code{data/raw/} y entender qué estás mirando sin tener que reconstruir
+el contexto vos mismo. Cada número y figura viene de los dos archivos reales que este
+repositorio ya tiene descargados, vía \code{scripts/analyze\_real\_data.py} y
+\code{scripts/explore\_real\_data\_structure.py}.
+\end{cbox}
+
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Qué es CICIDS-2018}
+% ============================================================
+
+CICIDS-2018 (Sharafaldin, Lashkari \& Ghorbani, 2018 --- \code{sharafaldin2018cicids} en
+\code{paper/references.bib}, verificada) es un dataset público de tráfico de red, generado
+en un testbed real (no simulado) con tráfico benigno de usuarios reales y ataques
+ejecutados a propósito, en días separados, contra una infraestructura AWS. Cada día del
+dataset corresponde a un tipo de ataque (o a tráfico puramente benigno): el archivo que
+usa este análisis, \code{Thuesday-20-02-2018}, es el día de DDoS-LOIC-HTTP; el otro,
+\code{Thursday-01-03-2018}, es el día de Infiltración.
+
+El tráfico crudo (paquetes) se procesó con \textbf{CICFlowMeter}, una herramienta que
+reconstruye cada conversación de red paquete por paquete y la resume en \textbf{una fila
+de estadísticas} por conversación. Ese resumen --- no los paquetes --- es lo que se
+distribuye públicamente y lo que este repositorio consume. La etiqueta (\code{Label}) no
+viene de un modelo ni de una heurística: viene del \textbf{calendario conocido de
+ataques} del testbed --- se sabe qué IP atacó a qué IP y cuándo, porque quien generó el
+dataset lo orquestó así.
+
+% ============================================================
+\section{Qué es un ``flujo''}
+% ============================================================
+
+Un \textbf{flujo} (flow) es una conversación entre dos hosts: mismo par de IPs, mismo par
+de puertos, mismo protocolo, dentro de una ventana de tiempo continua. \textbf{Una fila
+del CSV = un flujo}, no un paquete --- un flujo típico contiene entre unos pocos y miles
+de paquetes, todos resumidos (promedio, máximo, mínimo, desviación estándar) en las
+columnas de esa fila.
+
+\begin{cbox}{good}{La distinción que más confunde al empezar}
+\code{Tot Fwd Pkts} no es ``cuántos paquetes hay en el dataset'' --- es ``cuántos
+paquetes tuvo \emph{este flujo en particular}, en la dirección del que inició la
+conexión (forward)''. Cada fila es autocontenida: sus propios conteos, sus propios
+tiempos, su propia etiqueta.
+\end{cbox}
+
+``Forward'' (\code{Fwd}) es la dirección del host que abrió la conexión hacia el otro;
+``backward'' (\code{Bwd}) es la respuesta. En una conexión web normal, el cliente
+manda poco (una petición HTTP) y el servidor manda mucho (la página) --- \code{Bwd} suele
+ser mayor que \code{Fwd}. Guardá esa intuición: en \S\ref{sec:gotchas} vas a ver un
+ataque real donde pasa exactamente eso, al revés de lo que uno esperaría de un
+``atacante''.
+
+% ============================================================
+\section{Las familias de columnas, en lenguaje llano}
+% ============================================================
+
+84 columnas crudas (78 si el archivo no trae IPs --- ver \S\ref{sec:gotchas}), pero se
+organizan en pocas familias. La lista completa columna-por-columna con su nombre
+normalizado está en \code{docs/datos-reales/ANALISIS-DATOS-REALES.pdf} \S2; acá va el
+``para qué sirve cada familia'':
+
+\begin{center}
+\begin{longtable}{@{}lp{10cm}@{}}
+\toprule
+\textbf{Familia} & \textbf{Qué responde} \\
+\midrule
+\endhead
+Identificación & ¿Quién habló con quién? \code{Src/Dst IP}, \code{Src/Dst Port},
+  \code{Protocol} (6 = TCP, 17 = UDP). \code{Flow ID} es sólo la concatenación de las
+  cuatro anteriores, un identificador, no una feature. \\
+Temporales & ¿Cuándo, y durante cuánto tiempo? \code{Timestamp} (inicio del flujo),
+  \code{Flow Duration}, y las familias \code{IAT} (Inter-Arrival Time: tiempo entre
+  paquetes consecutivos, por dirección y total) --- captura si el flujo fue una ráfaga
+  rápida o una conversación espaciada. \\
+Volumen & ¿Cuánto se mandó? \code{Tot Fwd/Bwd Pkts} (conteo de paquetes),
+  \code{TotLen Fwd/Bwd Pkts} (bytes totales), y las tasas derivadas
+  \code{Flow Byts/s}, \code{Flow Pkts/s}. \\
+Forma del paquete & ¿Los paquetes eran todos iguales o muy variables?
+  \code{Fwd/Bwd Pkt Len Max/Min/Mean/Std}, y sus versiones sin separar dirección
+  (\code{Pkt Len *}). Una ráfaga de paquetes idénticos (std $\approx$0) se ve muy distinta
+  de tráfico web mixto. \\
+Banderas TCP & ¿Qué tipo de paquetes TCP hubo? \code{FIN/SYN/RST/PSH/ACK/URG Flag Cnt}
+  --- conteos de banderas de control TCP; patrones anómalos (muchos \code{SYN} sin
+  \code{ACK}, por ejemplo) son la firma clásica de varios ataques de red, aunque no de
+  los que este análisis mide. \\
+Ratios derivados & \code{Down/Up Ratio} (bytes bajada/subida), \code{Pkt Size Avg},
+  \code{Fwd/Bwd Seg Size Avg} --- resúmenes de las familias anteriores, pensados para
+  ahorrarle trabajo a un modelo que no puede ver la distribución completa. \\
+Actividad/inactividad & \code{Active Mean/Std/Max/Min}, \code{Idle Mean/Std/Max/Min} ---
+  cuánto tiempo el flujo estuvo ``activo'' (paquetes seguidos) vs.\ ``inactivo'' (pausas
+  largas) dentro de su propia duración. \\
+Ventana inicial & \code{Init Fwd/Bwd Win Byts} --- tamaño de ventana TCP inicial;
+  \textbf{usa $-1$ como centinela de ``desconocido''}, no como valor real (ver
+  \S\ref{sec:gotchas}). \\
+Etiqueta & \code{Label} --- texto libre (\code{Benign}, \code{DDoS attacks-LOIC-HTTP},
+  \code{Infilteration}, etc.), la verdad de campo del testbed. \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+% ============================================================
+\section{Una fila real, anotada}
+% ============================================================
+
+Un flujo de ataque real, tal cual aparece en \code{Thuesday-20-02-2018\_TrafficForML\_CICFlowMeter.csv}
+(vía \code{scripts/explore\_real\_data\_structure.py::annotated\_sample\_flow}):
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Columna} & \textbf{Valor} & \textbf{Lectura} \\
+\midrule
+\code{Src IP : Src Port} & 18.216.200.189:65404 & el atacante \\
+\code{Dst IP : Dst Port} & 172.31.69.25:80 & la víctima, puerto HTTP \\
+\code{Timestamp} & 2018-02-20 10:44:22 & dentro de la ventana de ataque real \\
+\code{Flow Duration} & 1.382.540 $\mu$s & $\approx$1.38 segundos \\
+\code{Tot Fwd/Bwd Pkts} & 3 / 4 & pocos paquetes en ambas direcciones \\
+\code{TotLen Fwd/Bwd Pkts} & \textbf{20 / 964 bytes} & el atacante mandó 20 bytes, recibió 964 \\
+\code{Label} & DDoS attacks-LOIC-HTTP & confirmado como ataque \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{cbox}{warn}{Por qué esta fila importa más de lo que parece}
+\code{TotLen Fwd Pkts} (20) $\ll$ \code{TotLen Bwd Pkts} (964): el atacante manda poco y
+\emph{recibe} más --- exactamente lo opuesto a la intuición de ``un atacante inunda con
+tráfico''. LOIC-HTTP manda peticiones HTTP pequeñas y recibe la respuesta (o página de
+error) del servidor. Es la razón concreta, en un flujo real, de por qué
+\code{docs/datos-reales/ANALISIS-DATOS-REALES.pdf} mide un AUC de asimetría per-flujo
+\textbf{invertido} (0.381, peor que el azar) en este mismo archivo: la señal
+``manda-más-de-lo-que-recibe'' no apunta hacia el ataque en este tipo de tráfico, apunta
+en contra.
+\end{cbox}
+
+% ============================================================
+\section{Balance de clases}
+% ============================================================
+
+\begin{center}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Archivo} & \textbf{Filas} & \textbf{\% ataque} & \textbf{Etiquetas presentes} \\
+\midrule
+Thursday-01-03-2018 & 331.126 & 28.1\% & Benign, Infilteration \\
+Thuesday-20-02-2018 & 7.948.746 & 7.2\% & Benign, DDoS attacks-LOIC-HTTP \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+7.2\% de positivos (DDoS) es un desbalanceo real, no extremo --- suficiente para que un
+modelo ingenuo (``predecir siempre benigno'') ya acierte 92.8\% de las veces, sin
+detectar un solo ataque. Es el régimen para el que técnicas como SMOTE (Chawla et al.\
+2002, ya citada en \code{paper/references.bib}) existen; ver el análisis de clustering en
+\code{docs/datos-reales/} \S6 para cómo se ve este desbalanceo en la estructura de los
+datos, no sólo en el conteo.
+
+% ============================================================
+\section{El grafo de interacciones}
+% ============================================================
+
+Cada flujo conecta dos hosts. Si se dibuja un nodo por host y una arista por cada par que
+conversó, aparece el grafo de interacciones de la red --- el objeto que le da nombre al
+proyecto (IAG = índice de asimetría de \emph{grafos}).
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{../../results/figures/real_data_interaction_graph_attack.png}
+\caption{Una ventana real de 60 segundos con ataque. Cada punto es un host; cada línea, un
+flujo. El grupito rojo abajo a la derecha son los $\sim$10 hosts atacantes hablándole a la
+víctima --- notá que no toca al resto del gráfico: el ataque, en esta ventana, es un
+\emph{componente aparte}, no está mezclado con el tráfico normal.}
+\end{figure}
+
+Leerlo: el tamaño de cada punto es cuántas conexiones tiene ese host (su \emph{grado});
+una flecha va de quien inició la conexión a quien la recibió. La estructura ``un
+puñado de hosts muy conectados + muchos hosts con pocas conexiones'' (visible en la
+ventana benigna, \code{docs/datos-reales/ANALISIS-DATOS-REALES.pdf} fig.\ 5) es típica de
+tráfico normal cliente-servidor; un grupo de puntos aislado, hablándole todos a un mismo
+destino, es la firma visual de un ataque de denegación de servicio.
+
+% ============================================================
+\section{Los gotchas reales de este dataset}
+\label{sec:gotchas}
+% ============================================================
+
+Encontrados corriendo el código contra los archivos reales en esta sesión --- no son
+advertencias genéricas de ``ojo con los datos sucios'', son cosas específicas de
+CICIDS-2018 que rompieron código real de este repositorio hasta que se corrigieron:
+
+\begin{center}
+\begin{longtable}{@{}p{4.2cm}p{9.5cm}@{}}
+\toprule
+\textbf{Gotcha} & \textbf{Qué hace} \\
+\midrule
+\endhead
+Esquema no uniforme & La mayoría de los archivos ``Processed Traffic Data'' empiezan en
+  \code{Dst Port} --- \textbf{sin} \code{Src IP}/\code{Dst IP}. De los 10 archivos del
+  bucket público, sólo uno (\code{Thuesday-20-02-2018}) trae el esquema ancho con IPs. Sin
+  IPs no hay grafo posible. \\
+Headers duplicados incrustados & Algunos archivos son la concatenación de varios exports
+  de CICFlowMeter, cada uno con su propia fila de encabezado repetida en medio del
+  archivo. Sin cuidado, esto corrompe la inferencia de tipos de cualquier parser (ver
+  \code{docs/datos-reales/ANALISIS-DATOS-REALES.pdf} \S3) --- una columna entera puede
+  leerse como texto en vez de número, silenciosamente. \\
+\code{Infinity} literal & \code{Flow Byts/s} y \code{Flow Pkts/s} dividen por
+  \code{Flow Duration}; cuando la duración es 0, CICFlowMeter escribe la palabra
+  \code{Infinity}, no un valor faltante. Hay que decidir explícitamente qué hacer con
+  eso (este repositorio lo reemplaza por 0). \\
+Centinela $-1$ & \code{Init Fwd/Bwd Win Byts} usa $-1$ para ``no se pudo determinar'',
+  no como una medida real negativa. Cualquier transformación que asuma valores no
+  negativos (un logaritmo, por ejemplo) tiene que tratar esto aparte. \\
+Cola pesada + inflación en cero & La mayoría de las columnas de conteo/flags son 0 para
+  la inmensa mayoría de los flujos, pero unos pocos flujos tienen valores enormes
+  (duración de horas, millones de bytes). Un escalado ingenuo (media/desvío) deja que
+  esos pocos flujos dominen cualquier análisis multivariado --- pasó de verdad al
+  intentar proyectar estos datos a 2D (\code{docs/datos-reales/ANALISIS-DATOS-REALES.pdf}
+  \S6). \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\end{document}

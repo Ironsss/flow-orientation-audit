@@ -1,0 +1,1116 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+
+\definecolor{crit}{RGB}{155,25,25}
+\definecolor{warn}{RGB}{180,110,0}
+\definecolor{good}{RGB}{20,110,60}
+\definecolor{hdr}{RGB}{30,55,105}
+
+\titleformat{\section}{\normalfont\Large\bfseries\color{hdr}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{hdr}}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{Análisis estadístico de datos reales -- CICIDS-2018}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\code}[1]{\texttt{\small #1}}
+
+\newtcolorbox{cbox}[2]{colback=#1!5,colframe=#1,fonttitle=\bfseries,title={#2},
+  boxrule=0.9pt,left=5pt,right=5pt,top=4pt,bottom=4pt}
+
+\title{\textbf{\Large Primer análisis estadístico de datos reales}\\[4pt]
+\Large \textit{Documentación de columnas y contraste contra los supuestos del simulador}\\[8pt]
+\normalsize CICIDS-2018 real $\cdot$ dos archivos $\cdot$ 8.28M flujos}
+\author{Repositorio \code{Ironsss/iag-symmetry}}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{cbox}{hdr}{Qué es este documento y por qué existe}
+Hasta esta sesión, todo número que el proyecto citó sobre comportamiento de features,
+asimetría per-flujo, o criterios de Fase 0 provenía de \code{src/simulator/agents.py}
+--- tráfico sintético. Esta sesión descargó, por primera vez, dos archivos reales de
+CICIDS-2018 desde el bucket público. Este documento mide, sobre esos datos reales,
+exactamente lo que el resto del repositorio había medido sólo en simulación, y reporta
+la brecha donde la hay. La brecha es grande: el hallazgo central (\S\ref{sec:contraste})
+es que la asimetría per-flujo, que en el simulador separaba ataques con AUC 0.59--0.95,
+cae a un rango mucho más débil en tráfico real.
+
+\medskip
+Ampliado con tres cosas que ninguna tabla de un solo número mostraba: el grafo de
+interacciones real (\S\ref{sec:grafo} --- nunca se había visualizado, pese a ser el
+objeto central del framing original del proyecto), clustering no supervisado sobre
+cúmulos de flujos, no flujo por flujo (\S\ref{sec:clustering}), y el primer benchmark
+supervisado real (\S\ref{sec:benchmark} --- los cinco modelos de
+\code{src/models/benchmark.py} nunca habían corrido contra datos reales), y el experimento
+preregistrado H2 bajo restricción de información, corrido por primera vez contra datos reales
+(\S\ref{sec:h2} --- el gate de potencia se cumple por primera vez en la historia del proyecto,
+aunque el de saturación todavía no cede), y los 10 archivos del bucket, no sólo 2
+(\S\ref{sec:completitud} --- el AUC per-flujo invertido resulta ser específico de ataques de
+\emph{flood}, no un fenómeno general). Cierra con una síntesis que conecta desbalanceo,
+asimetría, topología, y estado del arte (\S\ref{sec:sintesis}).
+
+\medskip
+Cada número de este documento es reproducible con \code{python scripts/analyze\_real\_data.py
+data/raw/} y \code{python scripts/explore\_real\_data\_structure.py data/raw/Thuesday-20-02-2018\_TrafficForML\_CICFlowMeter.csv},
+cuya salida completa queda en \code{results/metrics/real\_data\_summary.json} y
+\code{results/metrics/real\_data\_clusters.json}.
+\end{cbox}
+
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Procedencia y alcance}
+% ============================================================
+
+Dos archivos, ambos descargados en esta sesión del bucket público
+\code{s3://cse-cic-ids2018/} (\S5 de \code{docs/onboarding/setup/SETUP-LOCAL.md}):
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+& \textbf{Thursday-01-03-2018} & \textbf{Thuesday-20-02-2018} \\
+\midrule
+Día / ataque & Infiltración & DDoS-LOIC-HTTP \\
+Tamaño & 108 MB & 3.8 GB \\
+Filas & 331.126 & 7.948.746 \\
+Esquema & sin \code{Src IP}/\code{Dst IP} & ancho (con IPs) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\code{Thuesday-20-02-2018} es, verificado contra los 10 archivos del bucket vía \code{GET}
+por rango HTTP (sin descargarlos completos), el \textbf{único} de los diez con el esquema
+ancho que el grafo necesita. No hay un segundo día con IPs para concatenar si un criterio
+de ventana no se cumple con éste solo --- eso ya se documentó en
+\code{docs/onboarding/setup/SETUP-LOCAL.md} y es relevante otra vez en \S\ref{sec:phase0}.
+
+% ============================================================
+\section{Documentación de columnas}
+% ============================================================
+
+\code{Thuesday-20-02-2018} trae 84 columnas crudas; \code{Thursday-01-03-2018} trae 80
+(le faltan \code{Flow ID}, \code{Src IP}, \code{Src Port}, \code{Dst IP}). De esas, el
+repositorio ya distingue tres roles en \code{src/ingest/loader.py}:
+
+\begin{center}
+\begin{tabular}{@{}lp{9.5cm}r@{}}
+\toprule
+\textbf{Rol} & \textbf{Qué es} & \textbf{Cuántas} \\
+\midrule
+identificador/IP & \code{Flow ID}, \code{Src IP}, \code{Src Port}, \code{Dst IP} & 4 (solo en el archivo DDoS) \\
+timestamp & \code{Timestamp} & 1 \\
+label & \code{Label} & 1 \\
+\code{CLASSIC\_FEATURES} & el subconjunto curado que \code{src/models/benchmark.py} entrena & 49 \\
+otras mapeadas & normalizadas por \code{COLUMN\_RENAME} pero fuera del baseline curado (p.\,ej.\ \code{subflow\_*}, \code{init\_*}, \code{cwe\_flag\_cnt}) & 29 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+De las 49 \code{CLASSIC\_FEATURES}, \textbf{24 son direccionales} (\code{"fwd"} o \code{"bwd"}
+en el nombre) --- el mismo 24/49 que \code{scripts/validate\_claims.py} ya verificaba
+estructuralmente, ahora confirmado además contra los datos reales: las 49 están presentes y
+con datos válidos en ambos archivos, no sólo en el nombre de la columna.
+
+% ============================================================
+\section{Calidad de datos, medida}
+% ============================================================
+
+\begin{cbox}{crit}{Hallazgo: headers duplicados corrompían el tipo de dato en el loader de producción}
+\code{Thursday-01-03-2018} es la concatenación de $\sim$26 exports de CICFlowMeter, cada
+uno con su propia fila de header repetida en medio del archivo (documentado primero en
+\code{docs/onboarding/setup/SETUP-LOCAL.md} durante el preflight). Lo que esta sesión
+encontró después es más grave: sin una anulación de esquema explícita, la inferencia de
+tipos de \code{polars} veía el texto del header como un valor no numérico dentro de lo que
+debía ser una columna numérica, y --- en vez de anular sólo ese valor --- \textbf{terminaba infiriendo
+la columna entera como \code{String}}. Le pasaba a las 49 \code{CLASSIC\_FEATURES} en este
+archivo. \code{\_clean\_data()} sólo limpia columnas de tipo numérico, así que su limpieza
+de infinitos/NaN nunca corría sobre este archivo. Corregido en \code{src/ingest/loader.py}
+(PR \#17): se lee el header real como texto plano y se fuerza \code{Float64} vía
+\code{schema\_overrides}, de modo que \code{ignore\_errors=True} anule sólo el valor
+puntual, no el tipo completo de la columna.
+\end{cbox}
+
+\begin{center}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Medida} & \textbf{Infiltración} & \textbf{DDoS} \\
+\midrule
+Filas de header incrustadas & 25 & 0 \\
+\code{flow\_byts\_per\_s} = $\infty$ (antes de limpiar) & 1.085 & 22.686 \\
+\code{flow\_pkts\_per\_s} = $\infty$ (antes de limpiar) & 2.919 & 59.453 \\
+Filas tras deduplicar (\code{.unique()}) & 331.028 & 7.948.746 \\
+Features degeneradas (\code{std}=0 o >99\% nulas) & \code{bwd\_psh\_flags} & \code{bwd\_psh\_flags} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Los infinitos son reales, no un artefacto de parseo: \code{flow\_byts\_per\_s} y
+\code{flow\_pkts\_per\_s} dividen bytes/paquetes por duración, y CICFlowMeter emite
+\code{Infinity} literal cuando la duración es cero. \code{\_clean\_data()} los reemplaza
+por 0.0 --- una aproximación documentada, no una suposición nueva de este análisis.
+
+Queda un residuo menor sin resolver: un puñado de filas conserva un \code{null} genuino
+(no infinito) en todas las \code{CLASSIC\_FEATURES} tras \code{\_clean\_data()}, artefacto
+de las filas de header incrustadas que \code{ignore\_errors} anuló --- \code{\_clean\_data}
+limpia infinitos/NaN, no nulos genuinos. Este análisis las excluye explícitamente
+(\code{.drop\_nulls()}) antes de cualquier cómputo sensible a \code{NaN} (AUC, correlación).
+No se filtran en el pipeline general; queda como mejora de bajo costo, no bloqueante.
+
+% ============================================================
+\section{Auditoría de features direccionales en datos reales}
+% ============================================================
+
+Más allá del conteo estructural 24/49, cada feature se midió por tasa de nulos y varianza
+real (no sólo si el nombre existe). Sobre \code{Thursday-01-03-2018}: de 49, sólo
+\textbf{\code{bwd\_psh\_flags}} resultó degenerada (constante o $>$99\% nula) --- el resto
+de las 24 direccionales tienen datos genuinamente variables en este archivo. El detalle
+completo, columna por columna (\code{count}, \code{null\_rate}, \code{mean}, \code{std},
+\code{p50}, \code{p90}, \code{p99}, \code{max}), está en
+\code{results/metrics/real\_data\_summary.json} bajo \code{numeric\_summary} --- 49 filas
+por archivo, demasiado para reproducir aquí sin perder legibilidad; \S\ref{sec:corr} resume
+lo que importa de esa tabla (redundancia), y las figuras muestran la forma de las
+distribuciones más sesgadas.
+
+% ============================================================
+\section{Estructura de correlación real}
+\label{sec:corr}
+% ============================================================
+
+Sobre una muestra sistemática determinística (cada $k$-ésima fila, sin RNG --- ver
+\S\ref{sec:metodo}) de las \code{CLASSIC\_FEATURES} no degeneradas, agrupadas por
+\code{src/audit/ablation.py::correlation\_groups(threshold=0.80)} --- el mismo umbral que
+ese módulo ya midió como el punto donde el daño a la importancia por permutación es severo
+(\S3 de \code{CLAUDE.md}):
+
+\begin{center}
+\begin{tabular}{@{}lp{10.5cm}@{}}
+\toprule
+\textbf{Archivo} & \textbf{Grupos redundantes ($\geq$2 features, corr $\geq 0.80$)} \\
+\midrule
+Infiltración & 6 grupos, incl.\ \{\code{tot\_fwd\_pkts}, \code{tot\_bwd\_pkts},
+  \code{totlen\_bwd\_pkts}, \code{fwd\_header\_len}, \code{bwd\_header\_len}\} y
+  \{\code{fwd\_pkt\_len\_max/std}, \code{bwd\_pkt\_len\_*}, \code{pkt\_len\_*},
+  \code{pkt\_size\_avg}\} \\
+DDoS & 9 grupos (muestra sistemática, $k$=10, 794.875 filas), el más grande:
+  \{\code{fwd\_pkt\_len\_*}, \code{bwd\_pkt\_len\_*}, \code{pkt\_len\_*},
+  \code{psh\_flag\_cnt}, \code{pkt\_size\_avg}\} (12 features) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La estructura de redundancia en datos reales es consistente con lo esperado de features
+de conteo/tamaño de paquete derivadas del mismo flujo (misma familia que
+\code{src/audit/ablation.py} ya documentaba con datos sintéticos) --- confirma que el
+umbral 0.80 sigue siendo razonable contra datos reales, no sólo contra el generador
+controlado con el que se midió originalmente.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{../../results/figures/real_data_thursday-01-03-2018_correlation.png}
+\caption{Correlación entre \code{CLASSIC\_FEATURES}, Infiltración real.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{../../results/figures/real_data_thuesday-20-02-2018_correlation.png}
+\caption{Correlación entre \code{CLASSIC\_FEATURES}, DDoS-LOIC-HTTP real.}
+\end{figure}
+
+% ============================================================
+\section{El contraste central: AUC per-flujo real vs.\ documentado}
+\label{sec:contraste}
+% ============================================================
+
+\begin{cbox}{crit}{Esta es la comparación que motivó el documento}
+\code{scripts/validate\_claims.py::claim\_perflow\_auc} mide, sobre el simulador, AUC
+0.9978 (PortScan) y 0.9464 (DDoS) para la asimetría per-flujo
+$\log(1+\text{fwd}) - \log(1+\text{bwd})$. \code{docs/metodologia/README.md} cita,
+también del simulador, un rango 0.587--0.686 para infiltración. Misma fórmula exacta,
+ahora sobre flujos reales:
+\end{cbox}
+
+\begin{center}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Archivo (real)} & \textbf{AUC real} & \textbf{AUC simulador (documentado)} & \textbf{n flujos} \\
+\midrule
+Infiltración & 0.537 & 0.587--0.686 & 331.027 (28.1\% ataque) \\
+DDoS-LOIC-HTTP & \textbf{0.381} & 0.9464 & 7.948.746 (7.25\% ataque) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Infiltración cae apenas por encima del azar (0.5) --- ya es más débil que el rango
+documentado en el simulador. Pero DDoS es el resultado que no se podía anticipar
+razonando: \textbf{0.381, por debajo de 0.5}. No es "sin señal" --- es señal
+\emph{sistemáticamente invertida}: en este tráfico real, las ventanas de ataque tienen en
+promedio \emph{menos} bytes enviados relativo a recibidos que el tráfico benigno, exactamente
+lo opuesto al supuesto (asimetría alta = probable ataque) sobre el que se construyó
+$A_{\text{dir}}$ y sobre el que el simulador entrena su tráfico de ataque. Una lectura
+mecánica plausible: LOIC-HTTP envía peticiones pequeñas y recibe respuestas/páginas de
+error --- el atacante manda poco y recibe más, al revés de un escaneo de puertos o una
+exfiltración. Es una hipótesis de por qué, no una prueba causal; lo que sí es directo es
+que \textbf{la dirección del efecto que el simulador asume no es universal}, y que
+asumirla sin medir es exactamente el error que \code{CLAUDE.md} ya cataloga (mistake \#3:
+``a default was reasoned rather than measured''). \S\ref{sec:completitud} confirma esta
+hipótesis contra los otros 8 tipos de ataque del dataset: la inversión resulta específica
+de ataques de \emph{flood} (DoS/DDoS), no un fenómeno general.
+
+Ninguno de los dos números es una confirmación del simulador; ambos van en la dirección
+que \code{docs/metodologia/REPLANTEO-OPERACIONAL.md} ya predecía (la per-flujo no
+sobrevive fuera del régimen limpio de CICIDS), pero con una magnitud --- y, en DDoS, una
+\emph{dirección} --- que el argumento teórico no anticipaba.
+
+% ============================================================
+\section{Barrido de criterios de Fase 0}
+\label{sec:phase0}
+% ============================================================
+
+Extiende el chequeo único (\code{window=60s}, $\tau$=0.01) que \code{scripts/preflight\_data.py}
+ya corrió sobre \code{Thuesday-20-02-2018}, a una grilla de \code{window\_seconds}
+$\in \{10,30,60,120,300\}$ $\times$ $\tau \in \{0.01, 0.05, 0.1\}$, para saber si el
+resultado depende del parámetro elegido o es robusto.
+
+\begin{center}
+\begin{tabular}{@{}rrrrl@{}}
+\toprule
+\textbf{window (s)} & \textbf{n ventanas} & \textbf{n ataque (min clase)} & \textbf{\% parcial} & \textbf{Criterios} \\
+\midrule
+10  & 3.873 & \textbf{383} (cumple $\geq$250) & 9.76\% & 3 sí / 4 no (9.76\%$<$10\%) \\
+30  & 1.418 & 127 & 8.89\% & 3 no / 4 no \\
+60  & 719   & 63  & 8.76\% & 3 no / 4 no \\
+120 & 360   & 32  & 8.89\% & 3 no / 4 no \\
+300 & 144   & 14  & 9.72\% & 3 no / 4 no \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+($\tau$ no mueve la aguja dentro de este rango --- 0.01/0.05/0.1 dan resultados
+prácticamente idénticos en cada fila; la tabla muestra $\tau$=0.01.) Dos cosas cambian la
+lectura de \code{SETUP-LOCAL.md}: primero, achicar la ventana a \textbf{10s sí cumple el
+criterio 3} (383 ventanas de ataque, sobre el mínimo de 250) --- la conclusión ``ningún
+parámetro alcanza'' no era cierta, sólo lo era en el punto (60s) que el preflight probó
+por defecto. Segundo, el criterio 4 queda \textbf{cerca pero no cumplido en todo el
+rango} (8.76\%--9.76\% contra el 10\% requerido) --- no es un fracaso categórico, es un
+margen estrecho y consistente, lo que sugiere que vale la pena probar ventanas aún más
+finas (5s, 2s) antes de concluir que el criterio 4 es inalcanzable con este único
+archivo.
+
+% ============================================================
+\section{Pipeline actual sobre datos reales, por primera vez}
+\label{sec:ddos-results}
+% ============================================================
+
+\begin{cbox}{good}{Por qué esta sección corre \code{src/features/windows.py}, no \code{src/iag/}}
+\code{CLAUDE.md} es explícito: \code{src/iag/} es \textit{``el índice retirado, mantenido
+como baseline auditado, no como propuesta''}; \code{src/features/} (tiers) es
+\textit{``la tesis, como código''}. La pregunta preregistrada vigente es H2
+(\code{docs/metodologia/REPLANTEO-OPERACIONAL.md}): si la topología degrada menos que la
+asimetría per-flujo bajo restricción. Correr el índice retirado sobre datos reales no
+respondería nada que el proyecto siga preguntando; correr
+\code{window\_features(tier=DIRECTIONAL)} --- que calcula topología, per-flujo, y el
+control C1 de tamaño en una sola llamada, sobre datos reales por primera vez --- sí.
+\end{cbox}
+
+Sobre la configuración por defecto (60s, $\tau$=0.01: 719 ventanas, 63 de ataque),
+\code{window\_features(tier=DIRECTIONAL)} da, por primera vez, el AUC a nivel de
+\emph{ventana} de cada familia de features contra la misma etiqueta:
+
+\begin{center}
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Familia} & \textbf{Feature} & \textbf{AUC (ventana, n=719, 63 positivas)} \\
+\midrule
+Per-flujo & \code{fl\_mean} & \textbf{0.0000} \\
+Per-flujo & \code{fl\_p90} & 0.0328 \\
+Per-flujo & \code{fl\_frac\_gt1} & 0.0517 \\
+Per-flujo & \code{fl\_std} & 0.9926 \\
+\midrule
+Topología & \code{top\_indeg\_gini} & 0.7232 \\
+Topología & \code{top\_edges\_per\_node} & 0.7001 \\
+Topología & \code{top\_reciprocity} & 0.6096 \\
+Topología & \code{top\_fanout\_max\_frac} & 0.2882 \\
+Topología & \code{top\_maxindeg\_frac} & 0.2604 \\
+\midrule
+\rowcolor{crit!8} Control C1 (tamaño) & \code{sz\_nodes} & 0.7810 \\
+\rowcolor{crit!8} Control C1 (tamaño) & \code{sz\_edges} & 0.7703 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{cbox}{warn}{No leer esto como H2 confirmada}
+Dos advertencias, ambas obligatorias por las propias reglas del proyecto
+(\code{CLAUDE.md}, mistake \#1 y \#2):
+
+\textbf{Potencia.} 63 ventanas positivas está muy por debajo de las $\geq$250/clase que
+\code{docs/metodologia/README.md} exige antes de confiar en un AUC. Estos números son
+descriptivos de esta corrida puntual, no una prueba confirmatoria de H2.
+
+\textbf{El control C1 no se despega de la topología.} \code{sz\_nodes} (0.7810) y
+\code{sz\_edges} (0.7703) --- el control de ``sólo tamaño'', que nunca debería ser
+tratamiento --- puntúan \emph{tan alto o más} que \code{top\_indeg\_gini} (0.7232) y
+\code{top\_edges\_per\_node} (0.7001). Es exactamente el patrón que produjo el confound de
+AUC 1.0000 documentado en \code{docs/metodologia/README.md} (positivos y negativos con
+\code{n\_nodes} sin solapamiento). No se puede afirmar que la topología aporte algo que el
+tamaño de la ventana no explique ya, con esta corrida sola.
+
+Lo único que se sostiene sin reserva es la asimetría del resultado per-flujo:
+\code{fl\_mean} en \textbf{0.0000} (inversión casi perfecta, consistente con el AUC a nivel
+de flujo de \S\ref{sec:contraste}) contra \code{fl\_std} en 0.9926 --- la \emph{dispersión}
+del ratio por ventana separa casi perfectamente, aunque su \emph{media} esté invertida.
+Sugiere que la ventana de ataque no cambia el promedio de la asimetría, sino cuánto varía
+--- una pista concreta para la siguiente iteración de H2, no una respuesta.
+\end{cbox}
+
+% ============================================================
+\section{El grafo de interacciones real}
+\label{sec:grafo}
+% ============================================================
+
+Todo el framing original de este proyecto (IAG = índice de asimetría de \emph{grafos}) se
+construyó y se retiró sin que nadie viera nunca un grafo real. Esta sección lo muestra:
+nodos = hosts, aristas = flujos agregados por par \code{(src, dst)}, dibujados con
+\code{networkx} (reintroducido como dependencia --- se había retirado el 2026-08-25 por no
+tener uso real; ahora lo tiene) sobre dos ventanas de 60s reales del archivo DDoS: una con
+tráfico de ataque, una completamente benigna.
+
+\begin{center}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Ventana} & \textbf{hosts} & \textbf{aristas} & \textbf{aristas con ataque} \\
+\midrule
+Ataque  & 1.579 & 5.342 & \textbf{10} (0.19\%) \\
+Benigna & 1.733 & 5.649 & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.85\textwidth]{../../results/figures/real_data_interaction_graph_attack.png}
+\caption{Ventana de ataque real (100 hosts de mayor grado + todos los adyacentes a una
+arista de ataque, de 1.579 totales). El componente rojo, aislado, es el ataque: atacantes
+hablándole a un único destino, sin ninguna conexión con el resto del tráfico de fondo.}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.85\textwidth]{../../results/figures/real_data_interaction_graph_benign.png}
+\caption{Ventana benigna real (100 hosts de mayor grado, de 1.733 totales). Estructura de
+hub-and-spoke: un puñado de servidores concentran la mayoría de las conexiones.}
+\end{figure}
+
+\begin{cbox}{good}{Lo que el grafo muestra que ninguna tabla mostraba}
+Sólo \textbf{10 de 5.342 aristas (0.19\%)} en la ventana de ataque llevan tráfico de
+ataque, y ese componente queda \textbf{topológicamente desconectado} del resto de la
+red --- ni un solo host benigno de fondo interactúa con el par atacante/víctima en esta
+ventana. Es la misma dilución que \code{docs/review/} ya documentó de forma numérica
+(\code{A\_dir} diluido por tráfico de fondo): acá se ve. También explica, en parte, por
+qué el control C1 (tamaño) puntúa tan alto en \S\ref{sec:ddos-results} --- una ventana de
+ataque con un componente extra, aislado, tiene por construcción más estructura que
+contar que una puramente benigna, sin que eso sea la asimetría relacional que el proyecto
+busca medir.
+\end{cbox}
+
+% ============================================================
+\section{Clustering: pensar en cúmulos de filas, no en filas}
+\label{sec:clustering}
+% ============================================================
+
+Todo lo anterior mide una fila (un flujo) o una ventana a la vez. Esta sección agrupa: sobre
+la misma muestra sistemática determinística de \S\ref{sec:corr} (305.721 filas, cada
+26$^{\text a}$ fila), \code{KMeans} sobre las 48 \code{CLASSIC\_FEATURES} no degeneradas,
+con $k$ elegido por silhouette score ($k \in [2,8]$, sobre un sub-muestreo de 5.000 filas
+por costo $O(n^2)$ de silhouette).
+
+\begin{cbox}{warn}{El preprocesamiento importó más de lo esperado}
+Dos intentos previos de proyectar esto a 2D con PCA fallaron de forma instructiva:
+\code{StandardScaler} solo dejó que 1-2 filas con un \code{flow\_duration}/\code{flow\_byts\_per\_s}
+legítimamente enorme dominaran la proyección (dos puntos en $\pm 300$, el resto aplastado
+en un blob). Recortar al percentil 1--99 y usar \code{RobustScaler} \emph{tampoco} alcanzó:
+varias columnas están tan infladas en cero (la mediana y los percentiles 25/75 son 0 para
+la mayoría de los flags/ratios) que su IQR es 0, y el \emph{fallback} de \code{RobustScaler}
+ante IQR=0 es dejar la columna \textbf{sin escalar} --- su magnitud cruda (microsegundos, en
+algunas columnas temporales) volvió a dominar todo. La solución fue \textbf{log1p con
+signo} ($\mathrm{sign}(x)\cdot\log(1+|x|)$, necesario porque \code{init\_fwd\_win\_byts}/
+\code{init\_bwd\_win\_byts} usan $-1$ como centinela de "desconocido") antes de
+\code{StandardScaler}. El preprocesamiento de datos de red de cola pesada no es un detalle
+menor de la tubería --- fue, en los hechos, la mitad del trabajo de esta sección.
+\end{cbox}
+
+$k=8$ (silhouette 0.531). El 99.99\% del tráfico de ataque de la muestra (22.083 de 22.086
+filas) cae en sólo \textbf{2 de los 8 clusters}:
+
+\begin{center}
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+\textbf{Cluster} & \textbf{benigno} & \textbf{ataque} & \textbf{\% ataque} \\
+\midrule
+2 & 75.051 & 10.974 & 12.8\% \\
+5 & 21.400 & 11.109 & \textbf{34.2\%} (vs.\ 7.2\% base) \\
+0, 1, 3, 4, 6, 7 & 187.184 & 3 & $\approx$0\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.95\textwidth]{../../results/figures/real_data_cluster_pca.png}
+\caption{Proyección PCA (2 componentes, 65.4\% de varianza explicada) de la muestra,
+coloreada por cluster no supervisado (izquierda) y por etiqueta real (derecha, rojo =
+ataque).}
+\end{figure}
+
+Ni "sin estructura" ni "separación limpia": el ataque \textbf{se concentra}, no se
+distribuye uniformemente entre los 8 clusters, pero tampoco forma un cluster propio --- los
+dos clusters que lo contienen son mayoritariamente benignos (87\% y 66\% respectivamente).
+Para un clasificador supervisado esto es una noticia mixta: hay estructura no supervisada
+que correlaciona con el ataque (más de lo que el AUC per-flujo invertido de
+\S\ref{sec:contraste} sugeriría solo), pero separarla limpiamente todavía exige la
+etiqueta, no emerge sola.
+
+% ============================================================
+\section{Primer benchmark supervisado real}
+\label{sec:benchmark}
+% ============================================================
+
+Todo lo medido hasta acá evaluaba \emph{un} feature aislado (\S\ref{sec:contraste}) o
+estructura \emph{sin} etiqueta (\S\ref{sec:clustering}). Esta sección corre, por primera
+vez contra datos reales, los cinco modelos que \code{src/models/benchmark.py} ya tiene
+implementados --- con manejo de desbalanceo (\code{class\_weight="balanced"} /
+\code{scale\_pos\_weight}) y SHAP --- \textbf{a nivel de flujo}, sin construir grafos ni
+ventanas: las funciones de \code{src/models/benchmark.py} sólo piden columnas de features
+más \code{has\_attack}, así que el problema de potencia que bloqueó H2
+(\S\ref{sec:phase0}, sólo 63--383 ventanas) \textbf{no aplica acá} --- se usan los 7.9M
+flujos completos, con \code{src.models.benchmark.temporal\_split} (70/30 cronológico, no
+aleatorio).
+
+\begin{cbox}{warn}{Por qué esta tabla no encabeza con ROC-AUC}
+Bajo desbalanceo (7.2\%--35.9\% ataque según archivo/split), ROC-AUC puede verse fuerte
+aunque el modelo sea mediocre detectando la clase que importa --- pondera los verdaderos
+negativos contra una mayoría benigna enorme. La tabla encabeza con \textbf{precisión y
+recall de la clase ataque específicamente} (no promediados con la clase benigna, que es
+casi siempre más fácil) y PR-AUC, cuya línea base ya es la tasa de positivos del
+conjunto de prueba, no 0.5. \code{f1\_macro} (guardado en
+\code{results/metrics/real\_data\_benchmark.json} para quien lo quiera) queda deliberadamente
+fuera de la tabla por la misma razón: en Infiltración, \code{f1\_macro}=0.687 para
+RandomForest suena mejor que el F1(ataque)=0.591 real --- la diferencia es exactamente el
+desbalanceo que \code{f1\_macro} esconde.
+\end{cbox}
+
+\begin{center}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+\textbf{Modelo} & \textbf{PR-AUC} & \textbf{Precisión(atq)} & \textbf{Recall(atq)} & \textbf{F1(atq)} & \textbf{Tiempo} \\
+\midrule
+\multicolumn{6}{@{}l}{\textit{Infiltración (231.718 train / 99.309 test, 35.9\% ataque en test)}} \\
+RandomForest    & 0.713 & 0.612 & 0.571 & 0.591 & 144.2 s \\
+XGBoost         & 0.705 & 0.562 & 0.605 & 0.583 & 2.1 s \\
+IsolationForest & 0.317 & 0.245 & 0.056 & 0.091 & 2.4 s \\
+Autoencoder     & 0.328 & 0.223 & 0.056 & 0.089 & 4.9 s \\
+OneClassSVM$^\dagger$ & 0.332 & 0.357 & 0.106 & 0.163 & 70.4 s \\
+\multicolumn{6}{@{}l}{\textit{DDoS-LOIC-HTTP (5.564.122 train / 2.384.624 test, 17.2\% ataque en test)}} \\
+RandomForest    & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 341.3 s \\
+XGBoost         & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 35.5 s \\
+IsolationForest & 0.242 & 0.015 & 0.007 & 0.010 & 74.4 s \\
+Autoencoder     & 0.172 & 0.015 & 0.007 & 0.010 & 96.6 s \\
+OneClassSVM$^\dagger$ & 0.161 & 0.015 & 0.007 & 0.010 & 1397.0 s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent $^\dagger$ Entrenado sobre una muestra sistemática de 50.000 filas benignas, no
+el conjunto completo --- costo $O(n^2)$--$O(n^3)$ documentado en el propio
+\code{run\_one\_class\_svm} (confirmado: 1397\,s incluso con esa muestra acotada).
+
+\noindent \textit{Nota de procedencia}: Precisión/F1(ataque) de los tres modelos no
+supervisados en DDoS se derivan algebraicamente ---
+$\text{precisión}=\mathrm{TP}/(\mathrm{TP}+\mathrm{FP})$, con
+$\mathrm{TP}=\text{recall}\times n_{\text{ataque}}$ y $\mathrm{FP}=\text{FPR}\times
+n_{\text{benigno}}$ --- a partir de recall/FPR y el tamaño exacto de cada clase en el
+conjunto de prueba (410.301 ataque / 1.974.323 benigno), ya medidos en una corrida
+completa anterior; no son una estimación. RandomForest/XGBoost sí se re-corrieron de
+punta a punta (XGBoost, 122\,s con carga de datos incluida) para confirmar los números y
+generar la curva real de abajo, después de que el proceso en segundo plano de esta
+sesión se interrumpiera externamente tres veces seguidas sobre la corrida completa de
+los cinco modelos.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.95\textwidth]{../../results/figures/real_data_benchmark_Thursday-01-03-2018_TrafficForML_CICFlowMeter_RandomForest_pr_roc.png}
+\caption{Curvas PR y ROC reales, RandomForest sobre Infiltración. La curva PR --- no el
+escalar PR-AUC --- muestra dónde importa: precisión $\approx$0.95--0.99 hasta recall
+$\approx$0.35, y cae con fuerza después. Al umbral por defecto (0.5) el modelo opera en la
+zona de caída (precisión 0.612, recall 0.571) --- ajustar el umbral es un trade-off real,
+visible acá y ausente en un solo número de AUC.}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.95\textwidth]{../../results/figures/real_data_benchmark_Thuesday-20-02-2018_TrafficForML_CICFlowMeter_XGBoost_pr_roc.png}
+\caption{Curvas PR y ROC reales, XGBoost sobre DDoS. A diferencia de Infiltración, acá la
+curva es literalmente el escalón perfecto: precisión = 1.0 para todo recall hasta 1.0.
+No es un artefacto de la escala del gráfico --- es el resultado exacto, verificado
+corriendo el modelo, no asumido a partir del AUC.}
+\end{figure}
+
+\begin{cbox}{crit}{AUC = 1.000 exige el mismo escrutinio que cualquier otro 1.0000 en este proyecto}
+\code{CLAUDE.md} documenta, como mistake \#1, que \textbf{este mismo proyecto} ya publicó
+un AUC de 1.0000 que resultó ser un confound (\code{n\_nodes} separando corridas, no
+ataques). Un 1.000 perfecto en 2.384.624 filas de prueba --- 0 falsos positivos, recall
+1.000, \textbf{y también precisión 1.000 y F1(ataque) 1.000}, no sólo el AUC agregado ---
+exige la misma sospecha, no una celebración automática. Lo que se verificó antes de
+escribir esto:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt]
+\item \textbf{No es \code{dst\_port} solo.} El 100\% de los flujos de ataque van al
+  puerto 80 --- pero también el 11.8\% de los flujos \emph{benignos} de este mismo
+  archivo (868.974 de 7.372.555). Un solo feature categórico no alcanza para separar
+  perfectamente.
+\item \textbf{La importancia de features está repartida}, no concentrada en una: el top
+  20 de RandomForest (\code{results/figures/real\_data\_benchmark\_*\_RandomForest\_importance.png})
+  reparte el peso entre \code{totlen\_fwd\_pkts} (0.15), \code{fwd\_pkt\_len\_max} (0.11),
+  \code{flow\_iat\_max} (0.09), \code{dst\_port} (0.07), y una decena más --- no hay una
+  única columna filtrando la etiqueta.
+\item \textbf{La diferencia de volumen es real y enorme}: \code{totlen\_fwd\_pkts} medio
+  en ataque = 4.956 bytes vs.\ 382 en benigno (13$\times$) --- LOIC-HTTP mantiene flujos
+  de flood de larga duración (hasta 120s) con miles de peticiones repetidas, muy distinto
+  de un flujo web normal.
+\item \textbf{El contraste con lo no supervisado es aún más marcado que en Infiltración}:
+  IsolationForest/Autoencoder/OneClassSVM tienen precisión(ataque) $\approx$1.5\% en
+  DDoS --- de cada 100 flujos que marcan como ataque, $\approx$1--2 lo son de verdad. Si
+  el 1.000 de RandomForest/XGBoost fuera un artefacto trivial del desbalanceo, se
+  esperaría que los no supervisados también se beneficiaran de alguna forma; en cambio,
+  sin la etiqueta, el problema es casi tan difícil como encontrar una aguja al azar.
+\end{itemize}
+
+\textbf{Conclusión, con la misma honestidad que el resto del documento}: no se encontró
+un confound de una sola columna, pero tampoco se agotaron todas las formas posibles de
+confound (no se verificó, por ejemplo, superposición de IPs entre train y test). Lo que
+sí se puede afirmar es que este resultado es \textbf{consistente, no contradictorio}, con
+el argumento central del proyecto (\code{docs/metodologia/REPLANTEO-OPERACIONAL.md}): las
+features completas de CICIDS presuponen visibilidad total de paquetes, y bajo ese régimen
+limpio la detección \textbf{satura trivialmente} --- ya se había medido así en el
+simulador (AUC 1.0000 en fuerza bruta, techo en PR-AUC); esta es la primera vez que se
+mide así, con el mismo patrón, en \textbf{datos reales}. No es evidencia nueva a favor del
+modelo --- es evidencia de que el régimen limpio no deja margen para medir nada, exactamente
+lo que motivó todo el replanteamiento operacional.
+\end{cbox}
+
+La disparidad train/test es aún más marcada que en Infiltración: 2.98\% de ataque en
+entrenamiento vs.\ 17.2\% en prueba --- el ataque real se concentra hacia el final
+cronológico de la captura. Con 5.56M filas de entrenamiento, 2.98\% siguen siendo
+$\approx$166.000 flujos de ataque para entrenar, no una muestra degenerada.
+
+\begin{cbox}{good}{En Infiltración: supervisado gana, pero lejos de perfecto}
+RandomForest atrapa el 57\% de los ataques reales (recall) y, de lo que marca como
+ataque, acierta el 61\% (precisión) --- F1(ataque)=0.591. Los tres baselines no
+supervisados, entrenados sólo con tráfico benigno, ni siquiera se acercan: recall
+5.6--10.6\%, F1(ataque) 0.09--0.16. Es la misma historia que el clustering de
+\S\ref{sec:clustering} ya insinuaba (el ataque no se aísla solo) llevada a su conclusión
+lógica: sin la etiqueta, ningún método no supervisado probado encuentra al ataque;
+combinando las 48 features \emph{con} la etiqueta, un modelo de árboles sí recupera una
+detección real --- lejos de perfecta (recall 57\%, no 100\%), pero muy por encima del AUC
+de 0.537 que el feature aislado daba solo, y del recall $\approx$0 de intentarlo sin
+etiqueta. La combinación de features hace el trabajo que ningún feature ni ningún cluster
+hacía por separado. El patrón de "no supervisado no encuentra nada, supervisado sí" se
+repite en DDoS (arriba) --- con una magnitud muy distinta.
+\end{cbox}
+
+Nota metodológica honesta: el split temporal (no aleatorio, para evitar fuga de
+información) muestra tasas de ataque distintas entre entrenamiento (24.8\%) y prueba
+(35.9\%) en el archivo de Infiltración --- el ataque no está distribuido uniformemente en
+el tiempo dentro del propio archivo. Es exactamente el tipo de cosa que un split aleatorio
+escondería y que este split, más honesto, expone.
+
+% ============================================================
+\section{H2 bajo restricción, con datos reales: el experimento preregistrado, por fin corrido}
+\label{sec:h2}
+% ============================================================
+
+\code{experiments/04\_restriction.py} es el experimento preregistrado de H2
+(\code{docs/metodologia/REPLANTEO-OPERACIONAL.md}): ¿la topología degrada \emph{menos} que la
+asimetría per-flujo bajo restricción de información (muestreo 1:N, truncamiento temporal)? Su
+propio docstring decía, textual, que existe para correr \textit{``sin cambios en cuanto lleguen
+datos reales''}. Nunca había corrido contra datos reales --- sólo contra el simulador, donde el
+baseline per-flujo satura en 1.0000 y el gate de potencia (\code{MIN\_WINDOWS\_PER\_CLASS=250}) no
+se cumple nunca. Esta sección lo corre por primera vez contra \code{Thuesday-20-02-2018}, sin
+modificar el gate, el criterio de decisión, ni los controles --- sólo se agregó una fuente de
+datos real (\code{--data-path}) y un parámetro de tamaño de ventana (\code{--window-seconds}), con
+el mismo split temporal 70/30 (\code{temporal\_split}) ya usado en \S\ref{sec:benchmark}.
+
+\begin{center}
+\begin{tabular}{@{}lrrrrl@{}}
+\toprule
+\textbf{Eje} & \textbf{ventana} & \textbf{n+/n- (min)} & \textbf{per-flujo} & \textbf{topología} & \textbf{gate} \\
+\midrule
+Muestreo    & 60s & 45 & 0.891--1.000 & 0.514--0.863 & potencia + saturación \\
+Truncamiento & 60s & 45 & 1.000 (las 4) & 0.655--0.732 & potencia + saturación \\
+Muestreo    & 10s & 2--270 & 0.500--1.000 & 0.500--0.946 & saturación (potencia \emph{sí} cumple en 3/4) \\
+Truncamiento & 10s & 270 & 0.995--1.000 & 0.603--0.819 & saturación \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{cbox}{good}{El hallazgo real: a 10s, el gate de potencia por fin se cumple --- y el de saturación sigue sin ceder}
+Con ventanas de 60s (el default de \code{window\_features}), la clase minoritaria del split de
+\emph{prueba} queda en 45 ventanas en las 8 corridas --- muy por debajo de 250. Con ventanas de
+10s, sube a \textbf{270} en 3 de 4 niveles de muestreo y en los 4 de truncamiento ---
+\textbf{la primera vez en la historia de este proyecto que el criterio de $\geq$250 ventanas por
+clase se cumple en una corrida real del experimento preregistrado}, no sólo en un barrido
+descriptivo (\S\ref{sec:phase0}). Pero el gate de saturación no cede: el baseline per-flujo mide
+entre 0.977 y 1.000 en absolutamente todas las combinaciones de muestreo/truncamiento con ventanas
+de 10s, salvo en el punto más extremo (muestreo 1:1000), donde los datos colapsan a 2 ventanas de
+ataque y todo cae a 0.500 por falta de datos, no por restricción real.
+\end{cbox}
+
+\textbf{El patrón direccional, reportado sin certificar un veredicto} (el gate sigue bloqueando
+uno formal, y esta sesión no lo fuerza con \code{--force} salvo para depuración): en las
+\textbf{16 combinaciones} corridas, la topología queda \emph{por debajo} del per-flujo en las 16
+--- nunca al revés, ni siquiera en el punto de mayor restricción real (muestreo 1:100, ventana
+10s: topología 0.946 vs.\ per-flujo 0.977). Si el gate hubiera cumplido, la lectura honesta según
+la propia regla de decisión del script sería \code{H2 REJECTED} (delta $<$ 0.05 en todos los
+niveles) --- no \code{H2 SUPPORTED}. Esto es lo opuesto de lo que H2 predice (que la topología
+degrade \emph{menos}); en este archivo específico, con este tipo de ataque específico
+(DDoS-LOIC-HTTP), el per-flujo resulta más robusto a la restricción de lo que la teoría
+anticipaba, no menos.
+
+\begin{cbox}{warn}{Por qué esto no cierra la pregunta}
+Un solo archivo, un solo tipo de ataque, ningún control C2/C3 fallado pero un gate de saturación
+que nunca cede: no alcanza para generalizar. Lo que sí cambia respecto a antes de esta sesión es
+que el bloqueo pasó de ser \textit{``no hay suficientes ventanas para intentarlo''} a
+\textit{``se puede intentar, y el per-flujo sigue sin dejar margen que medir''} --- un diagnóstico
+más específico y más cerca de una respuesta real. El siguiente paso honesto es un segundo día con
+IPs (opciones (b)/(c) de \code{SETUP-LOCAL.md}) o un tipo de ataque distinto al de LOIC-HTTP, para
+saber si el patrón de saturación es del archivo o del fenómeno.
+\end{cbox}
+
+\subsection{Re-corrida con windowing canónico: ¿cambia el instrumento el resultado?}
+\label{sec:h2-canonical}
+
+\code{scripts/run\_h2\_real.py} (nuevo) repite exactamente los mismos 8 niveles (4 de muestreo, 4
+de truncamiento) y las mismas dos ventanas (60s, 10s) de la corrida anterior, pero usando
+\code{src.audit.canonical} (el windowing corregido por P0.5) en vez de
+\code{src.features.windows.window\_features}, que re-derivaba los límites de ventana desde el
+\code{ts.min()} de cada frame ya restringido --- exactamente el bug de deriva de ancla que P0.5
+corrigió. También agrega el bootstrap 95\,\% CI pareado que \code{experiments/04\_restriction.py}
+nunca implementó (\S\ref{sec:h2}, el mismo método que
+\code{docs/methodology/H2\_SYNTHETIC\_FINDINGS.md} introdujo para el resultado sintético). El split
+train/test sigue siendo temporal (70/30) pero ahora alineado a un borde de ventana canónica, no a
+un corte de fila cruda, para que ninguna ventana quede partida entre los dos conjuntos.
+
+\textbf{Nota sobre las etiquetas de truncamiento a \code{window\_seconds=10}.} Los niveles de
+truncamiento se heredan sin cambios de \code{experiments/04\_restriction.py}: son
+\emph{fracciones} (1/60, 5/60, 10/60, 1.0), no segundos absolutos, definidas cuando la única
+ventana probada era de 60s. A \code{window\_seconds=10} las mismas fracciones corresponden a
+$\approx$0.17s/0.83s/1.67s/10s observados, no literalmente 1s/5s/10s/60s --- se preserva la
+convención original (y su etiqueta) tal cual para que la comparación con la tabla anterior sea
+exacta, pero el valor real detrás de cada etiqueta a 10s es el que aquí se aclara, no el que el
+nombre sugiere.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrrl@{}}
+\multicolumn{6}{l}{\textbf{Instrumento antiguo (PR \#24, windowing pre-P0.5)}} \\
+\toprule
+\textbf{Eje} & \textbf{ventana} & \textbf{n+/n- (min)} & \textbf{per-flujo} & \textbf{topología} & \textbf{gate} \\
+\midrule
+Muestreo    & 60s & 45 & 0.891--1.000 & 0.514--0.863 & potencia + saturación \\
+Truncamiento & 60s & 45 & 1.000 (las 4) & 0.655--0.732 & potencia + saturación \\
+Muestreo    & 10s & 2--270 & 0.500--1.000 & 0.500--0.946 & saturación (potencia \emph{sí} cumple en 3/4) \\
+Truncamiento & 10s & 270 & 0.995--1.000 & 0.603--0.819 & saturación \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+
+\begin{tabular}{@{}lrrrrl@{}}
+\multicolumn{6}{l}{\textbf{Windowing canónico (esta sesión, \code{scripts/run\_h2\_real.py})}} \\
+\toprule
+\textbf{Eje} & \textbf{nivel} & \textbf{n+/n-} & \textbf{per-flujo} & \textbf{topología} & \textbf{gate} \\
+\midrule
+Muestreo (60s)    & 1:1--1:1000 & 63/(123--153) & --- (nan) & --- (nan) & potencia \\
+Truncamiento (60s) & 1s--60s    & 63/153        & --- (nan) & --- (nan) & potencia \\
+Muestreo (10s)    & 1:1   & 378/913 & 0.5174 & 0.4899 & \textbf{OK} \\
+Muestreo (10s)    & 1:10  & 378/913 & 0.7891 & 0.4609 & \textbf{OK} \\
+Muestreo (10s)    & 1:100 & 378/890 & 0.4571 & 0.5050 & \textbf{OK} \\
+Muestreo (10s)    & 1:1000 & 4/0    & --- (nan) & --- (nan) & potencia \\
+Truncamiento (10s) & $\approx$0.17s & 378/913 & 0.8082 & 0.4617 & \textbf{OK} \\
+Truncamiento (10s) & $\approx$0.83s & 378/913 & 0.8082 & 0.4617 & \textbf{OK} \\
+Truncamiento (10s) & $\approx$1.67s & 378/913 & 0.6921 & 0.4619 & \textbf{OK} \\
+Truncamiento (10s) & 10s (completo) & 378/913 & 0.5174 & 0.4899 & \textbf{OK} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{cbox}{good}{El instrumento sí cambió el resultado --- y de una forma que refuerza, no debilita, la conclusión}
+A \code{window\_seconds=60} nada cambió: el gate de potencia sigue bloqueando todo (63 ventanas de
+ataque en el nuevo conteo contra 45 en el viejo --- la cifra exacta se movió porque el ancla ahora
+es fija, pero la conclusión no). A \code{window\_seconds=10} el cambio es grande: el baseline
+per-flujo \textbf{ya no satura en absoluto}. Bajo el windowing viejo medía 0.977--1.000 en casi
+todas las combinaciones; bajo el windowing corregido mide entre \textbf{0.4571 y 0.8082}, y en
+información completa (1:1 muestreo $\equiv$ 10s truncamiento, ambas filas dan exactamente los
+mismos números: 0.5174 per-flujo, 0.4899 topología --- la verificación interna de que ambos caminos
+de código coinciden en el caso sin restricción) el per-flujo está prácticamente en el azar. Esto
+implica que el bug de deriva de ancla que P0.5 corrigió no era un artefacto menor: en este archivo,
+\textbf{estaba inflando artificialmente la separabilidad per-flujo hasta casi 1.0}. Y por primera
+vez en la historia de este proyecto, \textbf{7 de las 8 combinaciones a 10s despejan ambos gates a
+la vez} (potencia $\geq$250 y saturación $\leq$0.90) --- sólo el muestreo 1:1000 sigue bloqueado
+(la clase benigna colapsa a 0 ventanas).
+\end{cbox}
+
+\textbf{Veredicto certificado, por primera vez con datos reales:} en las 7 combinaciones que
+despejan ambos gates, la regla de decisión pre-registrada da \code{H2 REJECTED} en las 7 ---
+\texttt{delta}(topología $-$ per-flujo) nunca alcanza $+0.05$. En 6 de las 7, \texttt{delta} es
+claramente negativo (per-flujo gana), con el CI bootstrap de 2000 remuestreos completamente por
+debajo de cero. La excepción interesante es \textbf{muestreo 1:100}: \texttt{delta}=$+0.0479$,
+CI=$[+0.0221, +0.0736]$ --- el intervalo \emph{excluye} cero (topología gana de forma
+estadísticamente real, no es ruido), pero el valor no llega al umbral de $0.05$ que la regla
+pre-registrada exige para contar como evidencia a favor de H2. Es el punto más cercano que la
+topología ha estado nunca de superar al per-flujo, en cualquiera de los dos instrumentos
+(sintético o real) --- y aun así, no alcanza.
+
+\begin{cbox}{warn}{Exploratorio, no parte de la regla de decisión de H2: ¿ayuda combinar features?}
+Igual que en el resultado sintético (\code{H2\_SYNTHETIC\_FINDINGS.md}), se calculó el mismo CI
+bootstrap pareado para \texttt{combined} $-$ \texttt{per-flujo}, exclusivamente post-hoc. A
+diferencia del caso sintético (donde el CI incluía cero en los 5 niveles), aquí el patrón es más
+fuerte: muestreo 1:10 da \texttt{delta}=$+0.0942$, CI=$[+0.0638, +0.1249]$ (excluye cero, y por
+encima del umbral de 0.05 que H2 exige --- pero esta comparación nunca fue la hipótesis
+pre-registrada); muestreo 1:100 da \texttt{delta}=$+0.0795$, CI=$[+0.0508, +0.1073]$; truncamiento
+$\approx$1.67s da \texttt{delta}=$+0.0756$, CI=$[+0.0524, +0.0982]$. Las dos filas de
+truncamiento más cortas ($\approx$0.17s/0.83s) dan \texttt{delta}=$-0.0281$, CI=$[-0.0647,+0.0098]$
+(incluye cero). Que esta señal exploratoria sea más fuerte en datos reales que en el sintético es,
+en sí, un hallazgo a anotar --- no a convertir retroactivamente en la pregunta confirmatoria.
+\end{cbox}
+
+% ============================================================
+\section{Completitud: las 10 capturas}
+\label{sec:completitud}
+% ============================================================
+
+Todo lo anterior en este documento --- el AUC invertido, el grafo, el clustering, el benchmark
+supervisado, H2 --- se midió sobre 2 de los 10 archivos del bucket. Esta sección corre los mismos
+dos scripts (\code{analyze\_real\_data.py}, \code{benchmark\_real\_data.py} --- \textbf{sin
+modificar ninguno}, ya aceptaban un directorio completo) sobre los 10, para responder la pregunta
+obvia: ¿el patrón se repite en los otros 8 tipos de ataque, o es específico de DDoS-LOIC-HTTP e
+Infiltración?
+
+Primero, una corrección de alcance: la documentación de este repositorio (\code{PLAN-DE-RECURSOS.md},
+\code{SETUP-LOCAL.md}) asumía \textit{``\textasciitilde 6.5 GB comprimido / \textasciitilde 60 GB
+descomprimido''} para el dataset completo --- un supuesto nunca verificado. Sumando los 10 archivos
+reales del bucket (\code{aws s3 ls}, sin paso de descompresión: son CSV planos): \textbf{6.886.649.507
+bytes $\approx$ 6.4 GiB en total}. Entran los 10 a la vez en cualquier máquina con SSD moderno;
+no hace falta procesar por lotes como la documentación anterior recomendaba.
+
+\begin{center}
+\begin{longtable}{@{}lp{4.4cm}rrr@{}}
+\toprule
+\textbf{Archivo} & \textbf{Etiqueta(s) real(es)} & \textbf{\% ataque} & \textbf{AUC per-flujo} & \\
+\midrule
+\endhead
+Friday-02-03 & Bot & 27.1\% & \textbf{0.838} & \\
+Friday-16-02 & DoS-Hulk, DoS-SlowHTTPTest & 50.4\% & \textbf{0.023} & \\
+Friday-23-02 & Brute Force-Web/-XSS, SQL Injection & 0.05\% & 0.694 & \\
+Thuesday-20-02 & DDoS-LOIC-HTTP & 7.2\% & 0.381 & \\
+Thursday-01-03 & Infiltration & 28.1\% & 0.537 & \\
+Thursday-15-02 & DoS-GoldenEye, DoS-Slowloris & 4.9\% & 0.590 & \\
+Thursday-22-02 & Brute Force-Web/-XSS, SQL Injection & 0.03\% & 0.633 & \\
+Wednesday-14-02 & SSH-/FTP-BruteForce & 19.0\% & 0.631 & \\
+Wednesday-21-02 & DDoS attack-HOIC, -LOIC-UDP & 65.0\% & \textbf{0.003} & \\
+Wednesday-28-02 & Infiltration & 11.3\% & 0.494 & \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\begin{cbox}{crit}{El patrón no es "la asimetría se invierte" --- es "se invierte según el mecanismo del ataque"}
+Con las 10 etiquetas reales confirmadas (no de memoria: \code{load\_csv(f).select('label').collect()},
+el mismo comando para las 10), aparece una estructura que 2 archivos no podían mostrar:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt]
+\item \textbf{Los ataques de \emph{flood} (DoS/DDoS) invierten la asimetría, y lo hacen todos}: DoS-Hulk
+  (0.023), DDoS-HOIC/LOIC-UDP (0.003), DDoS-LOIC-HTTP (0.381) --- las tres peores puntuaciones de
+  las 10, y las tres son variantes de saturar un servidor con peticiones. Wednesday-21-02
+  (\textbf{0.003}) es más extremo que cualquier número medido antes en este documento: casi
+  perfectamente invertido.
+\item \textbf{Bot y Brute Force/SQL Injection preservan la dirección esperada}: Bot llega a 0.838 ---
+  el mejor AUC per-flujo real medido en todo el dataset, mejor que cualquier cosa reportada hasta
+  ahora en este documento. Brute Force/SQLi y SSH/FTP-BruteForce quedan en 0.63--0.69, débiles pero
+  en la dirección correcta.
+\item \textbf{Infiltration es internamente consistente}: dos capturas distintas del mismo tipo de
+  ataque (Thursday-01-03, Wednesday-28-02) dan 0.537 y 0.494 --- ambas cerca del azar, sin la
+  inversión de los floods ni la fuerza del Bot. Es la clase de repetibilidad entre corridas
+  independientes que un hallazgo real debería mostrar.
+\end{itemize}
+
+Lectura mecánica, coherente con lo que cada ataque hace: un flood manda peticiones y \emph{recibe}
+la respuesta/error del servidor (fwd $\ll$ bwd, la dirección opuesta al supuesto de diseño); un bot
+o un ataque de fuerza bruta/inyección \emph{envía} el payload activamente (fwd $\gg$ bwd, la
+dirección que \code{A\_dir} siempre asumió). \textbf{La asimetría per-flujo no es una señal rota ---
+es una señal cuya dirección depende del mecanismo del ataque}, algo que 2 archivos (uno de cada
+extremo, por casualidad) no podían mostrar y que ninguna de las 10 referencias ya verificadas en
+\code{paper/references.bib} documenta explícitamente para este dataset.
+\end{cbox}
+
+También consistente en las 10: 49/49 \code{CLASSIC\_FEATURES} presentes, 24/49 direccionales
+(estructural, no depende del archivo), 6--9 grupos redundantes al umbral 0.80
+(\S\ref{sec:corr} usaba 6 y 9 como los extremos de 2 archivos; con los 10 el rango es el mismo,
+6--9 --- el umbral generaliza). Headers duplicados incrustados aparecieron en \textbf{3 de 10}
+archivos (Thursday-01-03, Friday-16-02, Wednesday-28-02), no sólo en el que motivó el fix original
+de \code{load\_csv()} (PR \#17) --- confirma que el bug que ese fix cerró no era un caso aislado.
+
+El mismo \code{benchmark\_real\_data.py} de \S\ref{sec:benchmark} (RandomForest, XGBoost,
+IsolationForest, Autoencoder, OneClassSVM, sin cambiar ninguno) corrido sobre los 10, mismo
+90/10 split temporal por archivo, reporta P/R/F1(ataque) reales de cada uno --- no PR-AUC solo:
+
+\begin{center}
+\begin{longtable}{@{}lp{4.0cm}lrrr@{}}
+\toprule
+\textbf{Archivo} & \textbf{Ataque} & \textbf{Mejor modelo} & \textbf{P(ataque)} & \textbf{R(ataque)} & \textbf{F1(ataque)} \\
+\midrule
+\endhead
+Thursday-01-03 & Infiltration & RandomForest & 0.612 & 0.571 & 0.591 \\
+Friday-02-03 & Bot & XGBoost & 1.000 & 1.000 & \textbf{1.000} \\
+Friday-16-02 & DoS-Hulk, DoS-SlowHTTPTest & OneClassSVM & 0.948 & 1.000 & \textbf{0.973} \\
+Friday-23-02 & Brute Force-Web/-XSS, SQL Injection & XGBoost & 0.395 & 0.842 & 0.538 \\
+Thuesday-20-02 & DDoS-LOIC-HTTP & XGBoost & 1.000 & 1.000 & \textbf{1.000} \\
+Thursday-15-02 & DoS-GoldenEye, DoS-Slowloris & XGBoost & 1.000 & 0.761 & 0.864 \\
+Thursday-22-02 & Brute Force-Web/-XSS, SQL Injection & XGBoost & 0.969 & 0.992 & \textbf{0.981} \\
+Wednesday-14-02 & SSH-/FTP-BruteForce & RandomForest & 1.000 & 1.000 & \textbf{1.000} \\
+Wednesday-21-02 & DDoS attack-HOIC, -LOIC-UDP & RandomForest & 1.000 & 0.988 & \textbf{0.994} \\
+Wednesday-28-02 & Infiltration & XGBoost & 0.276 & 0.397 & 0.326 \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\begin{cbox}{crit}{La saturación bajo visibilidad completa generaliza --- con dos excepciones reales, no una}
+\S\ref{sec:benchmark} ya había mostrado F1(ataque) = 1.000 en el archivo de DDoS bajo visibilidad
+completa (todas las columnas de CICFlowMeter, no sólo la asimetría per-flujo) y se preguntaba si
+era el archivo o el fenómeno. Con los 10, la respuesta es clara: \textbf{7 de 10 archivos saturan}
+(F1(ataque) $\geq$ 0.86) bajo un clasificador de flujo completo, cubriendo tipos de ataque tan
+distintos como Bot, DoS-Hulk/SlowHTTPTest, DDoS-LOIC-HTTP, DoS-GoldenEye/Slowloris, SSH/FTP-BruteForce
+y DDoS-HOIC/LOIC-UDP --- la saturación no es un artefacto de los 2 archivos originales, es el
+régimen dominante de CICIDS-2018 a nivel de flujo.
+
+Las excepciones son las que importan:
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt]
+\item \textbf{Infiltration falla en las dos capturas independientes}: Thursday-01-03 (F1=0.591) y
+  Wednesday-28-02 (F1=0.326) --- consistente con el AUC per-flujo cercano al azar de la tabla
+  anterior, y consistente entre sí (la misma repetibilidad que ya se destacó ahí). Es el único tipo
+  de ataque que un clasificador de flujo con visibilidad completa no resuelve bien en ninguna de
+  sus dos apariciones.
+\item \textbf{Dos archivos con la misma etiqueta (Brute Force-Web/-XSS, SQL Injection) y tasas de
+  ataque casi idénticas dan resultados opuestos}: Thursday-22-02 satura (F1=0.981, 128 positivos en
+  test) pero Friday-23-02 no (F1=0.538, 177 positivos en test) --- conteos de la clase positiva del
+  mismo orden de magnitud, así que no es sólo un problema de tamaño de muestra. Esto queda como
+  pregunta abierta, no como hallazgo resuelto: la etiqueta agrupa sub-ataques de \code{CICFlowMeter}
+  (Brute Force-Web, Brute Force-XSS, SQL Injection son tres etiquetas de ataque distintas colapsadas
+  en una sola categoría por esta tabla) que pueden no ser comparables entre capturas, y el propio
+  \code{scripts/benchmark\_real\_data.py} no las separa. Documentado aquí en vez de promediado
+  silenciosamente en la fila de la tabla.
+\end{itemize}
+\end{cbox}
+
+% ============================================================
+\section{Síntesis: desbalanceo, asimetría, features, y estado del arte}
+\label{sec:sintesis}
+% ============================================================
+
+Los hallazgos de este documento no viven por separado:
+
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{Desbalanceo.} 7.2\% de tasa de ataque en la muestra completa (DDoS) --- el
+  régimen para el que Chawla et al.\ 2002 (SMOTE, \code{chawla2002smote} en
+  \code{paper/references.bib}, ya verificado) es la referencia estándar del área. El clustering
+  (\S\ref{sec:clustering}) muestra que el desbalanceo no es sólo un problema de conteo: ni
+  siquiera un algoritmo no supervisado, sin ver la etiqueta, aísla el ataque en su propio
+  grupo --- se concentra en 2 de 8, mezclado con mayoría benigna.
+\item \textbf{Asimetría.} El AUC per-flujo invertido (0.381, \S\ref{sec:contraste}) tiene
+  ahora una ilustración concreta: un flujo de ataque real de esta muestra manda 20 bytes y
+  recibe 964 (\code{totlen\_fwd\_pkts}=20, \code{totlen\_bwd\_pkts}=964) --- exactamente la
+  dirección opuesta al supuesto "atacante manda más" sobre el que se construyó
+  $A_{\text{dir}}$.
+\item \textbf{Grafo/topología.} El grafo real (\S\ref{sec:grafo}) muestra el mecanismo
+  detrás del confound de C1 en \S\ref{sec:ddos-results}: un componente de ataque aislado
+  agrega estructura contable (más aristas, un sub-grafo extra) que no es la asimetría
+  relacional que el proyecto busca medir.
+\item \textbf{Estado del arte.} Akoglu et al.\ 2015 (grafos para detección de anomalías,
+  \code{akoglu2015graph}) y Zhong et al.\ 2024 (GNN para IDS, survey,
+  \code{zhong2024gnnids}) --- ambos ya en \code{paper/references.bib}, verificados ---
+  describen exactamente esta tensión: la señal
+  estructural existe, pero rara vez está limpiamente separada sin aprendizaje supervisado o
+  semi-supervisado sobre la estructura, no sólo agregación hecha a mano
+  (\code{top\_reciprocity}, \code{top\_indeg\_gini}, etc.).
+\item \textbf{Modelos de ML.} Un clasificador real sobre estos datos enfrenta, a la vez:
+  49 features con 9 grupos redundantes en este archivo (\S\ref{sec:corr}), una clase minoritaria al 7.2\%,
+  una señal de dirección invertida respecto al supuesto de diseño, y una estructura de
+  cluster que ayuda pero no resuelve la separación. El benchmark supervisado
+  (\S\ref{sec:benchmark}) es la respuesta empírica, medida en precisión/recall/F1 de la
+  clase ataque --- no en un ROC-AUC agregado que el desbalanceo puede inflar: en DDoS,
+  RandomForest/XGBoost combinando todo llegan a precisión=recall=F1=1.000 --- saturación,
+  no margen, exactamente lo que el régimen de visibilidad completa de CICIDS predice; en
+  Infiltración, más débil (F1(ataque) 0.58--0.59, recall 57--60\%) pero muy por encima de
+  cualquier pieza aislada, y de intentarlo sin etiqueta (F1(ataque) 0.01--0.16 en ambos
+  archivos, precisión $\approx$1.5\% en DDoS --- casi tan malo como azar). Ningún hallazgo
+  de este documento dice que el problema sea irresoluble bajo visibilidad completa ---
+  dice que esa visibilidad no existe en producción, que es exactamente el punto que
+  \code{REPLANTEO-OPERACIONAL.md} ya hacía antes de tener datos reales para confirmarlo.
+\end{itemize}
+
+% ============================================================
+\section{Metodología: cómo se midió sin colapsar la máquina}
+\label{sec:metodo}
+% ============================================================
+
+El archivo DDoS pesa 3.8\,GB / 7.9M filas. Ninguna función de este análisis materializa el
+frame completo de 84 columnas:
+
+\begin{itemize}[leftmargin=1.4em]
+\item Conteos, nulos, medias y percentiles: una sola pasada perezosa
+  (\code{LazyFrame.select(...).collect()}) con $\sim$9 agregaciones por columna --- \code{polars}
+  nunca construye el \code{DataFrame} completo para esto.
+\item Correlación: requiere una matriz materializada, así que se toma una muestra
+  \textbf{sistemática determinística} (cada $k$-ésima fila, $k = \lfloor n/750000 \rfloor$)
+  --- sin semilla, sin RNG: el mismo archivo siempre da la misma muestra.
+\item Barrido de ventanas: sólo se materializan las 6 columnas que
+  \code{window\_features} realmente toca (\code{timestamp}, \code{src\_ip}, \code{dst\_ip},
+  \code{is\_attack}, \code{totlen\_fwd\_pkts}, \code{totlen\_bwd\_pkts}), no las 84.
+\item Grafo de interacciones (\S\ref{sec:grafo}): se filtran las 7.9M filas a sólo las dos
+  ventanas de 60s elegidas \emph{antes} de llamar a \code{build\_temporal\_graphs} --- nunca
+  se construyen las $\sim$720 ventanas completas para dibujar dos.
+\item Clustering (\S\ref{sec:clustering}): mismo principio de muestra acotada que la
+  correlación, nunca los 48 features $\times$ 7.9M filas completos.
+\end{itemize}
+
+Tiempo y memoria observados (no prometidos, medidos con \code{Get-Process} durante la
+corrida):
+
+\begin{center}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{Infiltración (331k filas)} & \textbf{DDoS (7.9M filas)} \\
+\midrule
+Tiempo total (\code{analyze\_real\_data.py}) & 5.7 s & 668.5 s ($\approx$11.1 min) \\
+Tiempo total (\code{explore\_real\_data\_structure.py}) & --- & 82.7 s \\
+RSS pico observado & \multicolumn{2}{c}{$\approx$8 GB (sobre 32 GB disponibles en esta máquina)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+El costo no está en las agregaciones perezosas (segundos) sino en el barrido de
+\S\ref{sec:phase0}: \code{window\_features} recorre, en Python puro, cada ventana de cada
+una de las 15 combinaciones de la grilla --- son 15 pasadas completas sobre hasta 3.873
+ventanas cada una, no una sola. Es el costo esperado de reusar la función de producción
+tal cual está escrita (que prioriza claridad sobre velocidad de barrido) en vez de
+reimplementar una versión vectorizada sólo para este análisis --- una decisión de
+``código limpio'' antes que ``código rápido'', razonable para una corrida puntual de
+$\sim$11 minutos, no para un barrido que se fuera a repetir con frecuencia.
+
+% ============================================================
+\section{Implicaciones para el estado actual del proyecto}
+% ============================================================
+
+\begin{enumerate}[leftmargin=1.4em]
+\item El bug de \code{load\_csv()} (\S3) significa que \textbf{ningún resultado publicado
+  hasta hoy pudo haber usado \code{Thursday-01-03-2018} correctamente} --- pero como no
+  existían datos reales antes de esta sesión, no invalida ningún hallazgo previo; sí es
+  un fix necesario antes de que alguien lo use.
+\item El AUC per-flujo real (0.537 Infiltración, \textbf{0.381 DDoS}, \S\ref{sec:contraste})
+  no sólo confirma que el simulador sobreestima la señal per-flujo --- en DDoS mide una
+  \emph{inversión de dirección} que el argumento teórico de
+  \code{docs/metodologia/REPLANTEO-OPERACIONAL.md} no predecía, sólo la degradación. Vale
+  la pena revisar si \code{A\_dir}/la asimetría per-flujo asumen una dirección de ataque
+  que no es universal entre familias de ataque.
+\item El único archivo con IPs \textbf{no es un fracaso categórico de los criterios de
+  Fase 0}, como parecía con el único punto (60s) que \code{preflight\_data.py} probaba
+  --- el barrido (\S\ref{sec:phase0}) muestra que \code{window=10s} sí cumple el criterio
+  3, y que el criterio 4 queda cerca (8.8--9.8\% contra 10\%) en todo el rango probado, no
+  lejos. Antes de invocar las opciones (b)/(c)/(d) de \code{SETUP-LOCAL.md}, vale la pena
+  probar ventanas aún más finas sobre este mismo archivo.
+\item El AUC a nivel de ventana de la topología (\S\ref{sec:ddos-results}) no se despega
+  del control de tamaño C1 --- no hay, todavía, evidencia limpia de que la topología
+  aporte algo que el tamaño de ventana no explique. Repetir esta medición con potencia
+  adecuada ($\geq$250 ventanas/clase) es el paso que la falta actual de un segundo día con
+  IPs bloquea directamente.
+\item El grafo real (\S\ref{sec:grafo}) y el clustering (\S\ref{sec:clustering}) dan, por
+  primera vez, un mecanismo concreto para el confound de C1: el componente de ataque es un
+  sub-grafo aislado, y el ataque se concentra (no se distribuye uniforme, pero tampoco se
+  aísla del todo) en 2 de 8 clusters no supervisados. Ninguna de las dos cosas se sabía
+  antes de esta sesión pese a ser, en el caso del grafo, el objeto que dio nombre al
+  proyecto.
+\item El benchmark supervisado (\S\ref{sec:benchmark}) es el primer resultado real de
+  ``qué tan bien se puede detectar esto'', medido donde importa --- precisión y recall de
+  la clase ataque, no un ROC-AUC que el desbalanceo puede inflar. La respuesta depende
+  enteramente del régimen: bajo visibilidad completa (lo único que hay hoy), DDoS satura
+  (precisión=recall=F1=1.000, verificado que no es un confound de una sola columna) e
+  Infiltración queda fuerte pero no perfecta (F1(ataque) 0.58--0.59).
+\item El experimento preregistrado H2 (\S\ref{sec:h2}, \S\ref{sec:h2-canonical}) ya tiene
+  veredicto certificado con datos reales, no sólo un patrón crudo. La primera corrida (PR
+  \#24, windowing pre-P0.5) quedó bloqueada por saturación del per-flujo (0.977--1.000) en
+  las 16 combinaciones con potencia suficiente. Repetida con el windowing corregido por
+  P0.5 (\S\ref{sec:h2-canonical}), el per-flujo \textbf{deja de saturar por completo}
+  (0.4571--0.8082) --- el bug de deriva de ancla estaba inflando artificialmente la
+  separabilidad --- y 7 de las 8 combinaciones a 10s despejan ambos gates a la vez. La
+  regla de decisión pre-registrada da \code{H2 REJECTED} en las 7. Esto ya no es un
+  diagnóstico más específico: es la respuesta que \S\ref{sec:h2} decía que faltaba,
+  obtenida sobre el mismo archivo y el mismo tipo de ataque que ya se tenían, cambiando
+  únicamente el instrumento de medición. La síntesis completa, junto con el resultado
+  sintético equivalente, está en la \S\ref{sec:conclusion}.
+\end{enumerate}
+
+% ============================================================
+\section{Conclusión}
+\label{sec:conclusion}
+% ============================================================
+
+\textbf{H2 --- ¿la topología degrada menos que la asimetría direccional per-flujo bajo
+restricción de información, y la brecha se amplía?--- queda RECHAZADA}, con evidencia
+convergente de dos instrumentos construidos de forma independiente.
+
+\textbf{(i) Generador sintético v2, prueba final con potencia adecuada}
+(\code{docs/methodology/H2\_SYNTHETIC\_FINDINGS.md}): en información completa la topología
+pierde claramente contra el per-flujo (\texttt{delta}=$-0.2067$,
+CI=$[-0.2648,-0.1505]$). Bajo restricción la brecha se estrecha hacia la paridad, nunca
+hacia favorecer a la topología, en ningún nivel dentro del alcance evaluado.
+
+\textbf{(ii) Un archivo real de CICIDS-2018 (DDoS-LOIC-HTTP), re-corrida con windowing
+canónico esta sesión} (\S\ref{sec:h2-canonical}): veredicto certificado por primera vez ---
+\code{H2 REJECTED} en las 7 de 8 combinaciones a \code{window\_seconds=10} que despejan
+ambos gates (potencia y saturación). La excepción es muestreo 1:100, donde la topología
+gana con significancia estadística real (CI excluye cero) pero por debajo del umbral de
+$0.05$ que la regla pre-registrada exige.
+
+Por la propia regla pre-registrada de este proyecto (\code{CLAUDE.md}): \textit{``If
+topology degrades equally or worse, the framing does not get amended again --- the project
+concludes and the honest result is per-flow only.''} El proyecto concluye. La asimetría
+direccional per-flujo es el hallazgo honesto; la topología queda retenida como una
+hipótesis auditada y rechazada (la misma postura que \code{CLAUDE.md} ya le da a
+\code{src/iag/}: ``kept as an audited baseline, not a proposal'', ahora extendida al nivel
+topológico en general, no sólo al índice IAG retirado).
+
+Esta conclusión se limita a lo efectivamente medido: el tráfico sintético del Generador v2
+bajo los valores candidatos congelados, y una captura real de un solo tipo de ataque
+(DDoS-LOIC-HTTP). No se reclama que generalice a familias de ataque no evaluadas.
+
+\end{document}
