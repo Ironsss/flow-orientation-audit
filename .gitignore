@@ -1,0 +1,65 @@
+# Data (large files)
+data/raw/
+data/processed/
+*.csv
+*.parquet
+*.pkl
+*.h5
+
+# Results (regenerable)
+results/figures/
+results/metrics/
+results/tables/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# LaTeX
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.synctex.gz
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.pdf
+paper/Definitions/*-eps-converted-to.pdf
+
+# LaTeX build artifacts under docs/ -- the .tex source and compiled .pdf are
+# committed (docs/review/, docs/replanteamiento/, docs/datos-reales/, ...),
+# the intermediate files pdflatex leaves behind are not.
+docs/**/*.aux
+docs/**/*.log
+docs/**/*.out
+docs/**/*.toc
+docs/**/*.synctex.gz
+
+# Misc
+*.log
+.env

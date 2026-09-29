@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install pinned dependencies (CPU torch, no CUDA runtime)
+        env:
+          # torch>=2.2 from PyPI installs the full CUDA runtime -- ~4 GB of
+          # nvidia-*-cu13 wheels plus triton -- onto a GPU-less runner, and since
+          # 2026-08-29 an upstream release also pulled nvidia-nccl-cu12 alongside
+          # the cu13 stack. Together that exhausted the runner disk ([Errno 28])
+          # on every CI run. The PyTorch CPU index serves torch==<ver>+cpu, which
+          # declares no nvidia/triton dependencies.
+          PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
+        run: pip install --require-hashes -r requirements-ci.txt
+
+      - name: Install project (editable, deps already pinned above)
+        run: pip install -e . --no-deps
+
+      - name: Ruff lint
+        run: ruff check .
+
+      - name: Pytest
+        run: pytest
