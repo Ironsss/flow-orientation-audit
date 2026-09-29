@@ -1,0 +1,20 @@
+dataset,group,auc_signed,p_raw,p_holm,orientation_raw,orientation_holm,changed
+UNSW-NB15,Fuzzers,0.8425716120677927,0.0005,0.0045000000000000005,positive,positive,false
+UNSW-NB15,Analysis,0.7964724295843102,0.0005,0.0045000000000000005,positive,positive,false
+UNSW-NB15,Backdoors,0.8654352955916282,0.0005,0.0045000000000000005,positive,positive,false
+UNSW-NB15,DoS,0.8409997980354,0.0005,0.0045000000000000005,positive,positive,false
+UNSW-NB15,Exploits,0.6787668189140488,0.0005,0.0045000000000000005,positive,positive,false
+UNSW-NB15,Generic,0.8913158763261384,0.0005,0.0045000000000000005,positive,positive,false
+UNSW-NB15,Reconnaissance,0.8289652318097788,0.0005,0.0045000000000000005,positive,positive,false
+UNSW-NB15,Shellcode,0.8777546325566697,0.0005,0.0045000000000000005,positive,positive,false
+UNSW-NB15,Worms,0.7085536473066282,0.0005,0.0045000000000000005,positive,positive,false
+BoT-IoT,Recon/Service scan,0.359947747916099,0.0005,0.005,negative,negative,false
+BoT-IoT,Recon/OS fingerprint,0.3548262238401428,0.0005,0.005,negative,negative,false
+BoT-IoT,DDoS/TCP,0.7028944362436889,0.0005,0.005,positive,positive,false
+BoT-IoT,DDoS/UDP,0.7850674050884495,0.0005,0.005,positive,positive,false
+BoT-IoT,DDoS/HTTP,0.3196636407753192,0.0005,0.005,negative,negative,false
+BoT-IoT,DoS/TCP,0.6277890148389019,0.0005,0.005,positive,positive,false
+BoT-IoT,DoS/UDP,0.7893828172448694,0.0005,0.005,positive,positive,false
+BoT-IoT,DoS/HTTP,0.3399518695842823,0.0005,0.005,negative,negative,false
+BoT-IoT,Theft/Keylogging,0.41097495218339947,0.0005,0.005,negative,negative,false
+BoT-IoT,Theft/Data theft,0.2825205093093349,0.0005,0.005,negative,negative,false

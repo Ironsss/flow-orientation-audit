@@ -1,0 +1,12 @@
+dataset,group,n_rows,n_host_pairs,n_src_hosts,n_dst_hosts,rows_per_pair_median,n_attacker_hosts,n_time_blocks_60s,n_time_blocks_300s,n_time_blocks_600s
+BoT-IoT,Normal,9543,347,28,294,27.501440922190202,4,843,285,157
+BoT-IoT,Recon/Service scan,1463364,32,8,8,45730.125,4,732,163,88
+BoT-IoT,Recon/OS fingerprint,358275,32,8,8,11196.09375,4,170,38,23
+BoT-IoT,DDoS/TCP,19547603,32,8,8,610862.59375,4,39,9,5
+BoT-IoT,DDoS/UDP,18965106,32,8,8,592659.5625,4,41,9,5
+BoT-IoT,DDoS/HTTP,19771,32,8,8,617.84375,4,21,5,3
+BoT-IoT,DoS/TCP,12315997,32,8,8,384874.90625,4,43,9,5
+BoT-IoT,DoS/UDP,20659491,32,8,8,645609.09375,4,43,9,5
+BoT-IoT,DoS/HTTP,29706,32,8,8,928.3125,4,23,6,3
+BoT-IoT,Theft/Keylogging,1469,6,4,4,244.83333333333334,2,19,5,3
+BoT-IoT,Theft/Data theft,118,4,4,4,29.5,2,4,3,3
