@@ -1,0 +1,14 @@
+{
+  "title": "flow-orientation-audit: code, frozen plans and audits for the sign of directional flow asymmetry",
+  "upload_type": "software",
+  "license": "MIT",
+  "description": "Code, pre-registration freezes, confirmatory outputs and robustness audits for \"The Sign of Directional Flow Asymmetry Depends on the Benign Reference and the Measurement Pipeline: Preregistered Tests and Robustness Audits in Network Intrusion Detection\". Datasets are third-party and are not redistributed.",
+  "creators": [
+    {"name": "García Espinosa, David Alexis", "orcid": "0000-0001-6141-407X"},
+    {"name": "López S., Misael", "orcid": "0009-0001-8291-6340"},
+    {"name": "Malagón Martínez, J. Emilio", "orcid": "0009-0002-3241-6978"},
+    {"name": "Naranjo-Guerra, Jose I.", "orcid": "0009-0006-7536-1689"}
+  ],
+  "keywords": ["network intrusion detection", "flow asymmetry", "measurement validity", "pre-registration"],
+  "related_identifiers": []
+}
