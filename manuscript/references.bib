@@ -47,7 +47,7 @@
 % [2026-09-22]
 @article{koroniotis2019botiot,
   title={Towards the development of realistic botnet dataset in the {Internet of Things} for network forensic analytics: {Bot-IoT} dataset},
-  author={Koroniotis, Nickolaos and others},
+  author={Koroniotis, Nickolaos and Moustafa, Nour and Sitnikova, Elena and Turnbull, Benjamin},
   journal={Future Generation Computer Systems},
   volume={100},
   pages={779--796},
@@ -67,7 +67,7 @@
 
 % [2026-09-22]
 @article{cantone2024crossdataset,
-  title={On the Cross-Dataset Generalization of Machine Learning for Network Intrusion Detection},
+  title={Machine Learning in Network Intrusion Detection: A Cross-Dataset Generalization Study},
   author={Cantone, Marco and Marrocco, Claudio and Bria, Alessandro},
   journal={IEEE Access},
   volume={12},
@@ -79,7 +79,7 @@
 % [2026-09-22] Published at ICISSP 2025; arXiv version cited.
 @misc{pinto2024flowexporter,
   title={Flow Exporter Impact on Intelligent Intrusion Detection Systems},
-  author={Pinto, Daniela and others},
+  author={Pinto, Daniela and Vitorino, João and Maia, Eva and Amorim, Ivone and Praça, Isabel},
   year={2024},
   eprint={2412.14021},
   archivePrefix={arXiv}
@@ -101,7 +101,8 @@
   author={Arp, Daniel and Quiring, Erwin and Pendlebury, Feargus and Warnecke, Alexander and Pierazzi, Fabio and Wressnegger, Christian and Cavallaro, Lorenzo and Rieck, Konrad},
   booktitle={31st USENIX Security Symposium},
   pages={3971--3988},
-  year={2022}
+  year={2022},
+  url={https://mlsec.org/docs/2022-sec.pdf}
 }
 
 % [2026-09-22]
@@ -144,7 +145,7 @@
 % Verified via web search 2026-09-28 (DOI and pages 254-262 from DBLP-indexed listing).
 @inproceedings{liu2022errorprevalence,
   title={Error Prevalence in {NIDS} datasets: A Case Study on {CIC-IDS-2017} and {CSE-CIC-IDS-2018}},
-  author={Liu, Lisa and others},
+  author={Liu, Lisa and Engelen, Gints and Lynar, Timothy and Essam, Daryl and Joosen, Wouter},
   booktitle={2022 IEEE Conference on Communications and Network Security (CNS)},
   pages={254--262},
   year={2022},
@@ -152,7 +153,7 @@
 }
 
 % Published version: Computers & Electrical Engineering 108, 108692 (2023), doi 10.1016/j.compeleceng.2023.108692 (ScienceDirect/ACM listings).
-% The findings cited in the text were read in the arXiv preprint 2205.04112 ("On Generalisability of ...", same authors); AUTHORS: re-read the published version before submission.
+% Published version read in full (2026-10-02); findings cited in the text checked against it. The arXiv preprint 2205.04112 ("On Generalisability of ...") is the earlier version.
 @article{layeghy2022generalisability,
   title={Explainable Cross-domain Evaluation of {ML}-based Network Intrusion Detection Systems},
   author={Layeghy, Siamak and Portmann, Marius},
@@ -172,7 +173,6 @@
   archivePrefix={arXiv}
 }
 
-% NOTE: author lists of liu2022errorprevalence, flood2024smells, pinto2024flowexporter, koroniotis2019botiot and jung2004portscan are abbreviated ("and others") in this submission draft; restore the full lists at proof.
 % Added from the literature audit (2026-09-28); see literature/references_candidate.bib and literature_matrix.csv for verification level.
 @inproceedings{gil2001multops,
   title={{MULTOPS}: a data-structure for bandwidth attack detection},
@@ -183,16 +183,18 @@
 
 @inproceedings{jung2004portscan,
   title={Fast portscan detection using sequential hypothesis testing},
-  author={Jung, Jaeyeon and others},
+  author={Jung, Jaeyeon and Paxson, Vern and Berger, Arthur W. and Balakrishnan, Hari},
   booktitle={IEEE Symposium on Security and Privacy},
-  year={2004}
+  pages={211--225},
+  year={2004},
+  doi={10.1109/SECPRI.2004.1301325}
 }
 
 % Not peer reviewed; primary FloCon 2014 slides not located; implementation: https://github.com/reservoirlabs/bro-producer-consumer-ratio
 @misc{bullard2014pcr,
-  title={Producer Consumer Ratio ({PCR})},
+  title={{PCR} -- A New Flow Metric: Producer Consumer Ratio},
   author={Bullard, Carter and Gerth, John},
-  howpublished={Presentation, FloCon},
+  howpublished={Presentation, FloCon 2014, Charleston, SC, 13--16 January 2014. \url{https://www.sei.cmu.edu/documents/3797/2014_017_001_90063.pdf}},
   year={2014}
 }
 
@@ -228,7 +230,7 @@
 
 @inproceedings{flood2024smells,
   title={Bad Design Smells in Benchmark {NIDS} Datasets},
-  author={Flood, Robert and others},
+  author={Flood, Robert and Engelen, Gints and Aspinall, David and Desmet, Lieven},
   booktitle={IEEE European Symposium on Security and Privacy (EuroS\&P)},
   pages={658--675},
   year={2024},
@@ -341,4 +343,50 @@
   year={2026},
   eprint={2606.02601},
   archivePrefix={arXiv}
+}
+
+% Added 2026-10-02 from the parallel literature audit (J. E. Malagon). Checked 2026-10-02 (see literature/verification_2026-10-02.md): Elangovan/Cantone titles (Crossref), Bouke Fig. 11 and Fernandez-Barrios section 4.1 (arXiv PDFs), Zmaimita (Zenodo). Rosay not re-read.
+@article{elangovan2026crossdataset,
+  title={Cross-Dataset Temporal and Semantic Generalization of Intrusion Detection Models for the Future Internet},
+  author={Elangovan, Rajesh and Parthasarathy, Durga Devi and Jawahar, M. and Kaliyaperumal, Prabu and Balusamy, Balamurugan and Yogarayan, Sumendra and Venkatesan, Vivek},
+  journal={Future Internet},
+  volume={18},
+  number={4},
+  pages={194},
+  year={2026},
+  doi={10.3390/fi18040194}
+}
+
+@misc{bouke2026entropy,
+  title={Multi-Level Distributional Entropy from Flow Summary Statistics for Explainable Network Intrusion Detection},
+  author={Bouke, Mohamed Aly and Sayeed, Md Shohel and Heng, Swee-Huay and Abdullah, Azizol and Othman, Mohamed},
+  year={2026},
+  eprint={2606.29797},
+  archivePrefix={arXiv}
+}
+
+@misc{fernandezbarrios2026candidate,
+  title={Candidate Comparability Before Promotion: Conditional Validation in Adaptive Network Intrusion Detection},
+  author={Fern{\'a}ndez-Barrios, Roberto and Pastor-L{\'o}pez, Iker and Pikatza-Huerga, Amaia and Bringas, Pablo Garc{\'\i}a},
+  year={2026},
+  eprint={2609.04388},
+  archivePrefix={arXiv}
+}
+
+@misc{zmaimita2026prereg,
+  title={Preregistered analysis plan --- Cross-domain knowledge sharing for joint network intrusion and malware detection},
+  author={Zmaimita, Hicham},
+  year={2026},
+  publisher={Zenodo},
+  doi={10.5281/zenodo.21996144}
+}
+
+@inproceedings{rosay2022cicflowmeter,
+  title={Network Intrusion Detection: A Comprehensive Analysis of {CIC-IDS2017}},
+  author={Rosay, Arnaud and Cheval, Elo{\"\i}se and Carlier, Florent and Leroux, Pascal},
+  booktitle={Proceedings of the 8th International Conference on Information Systems Security and Privacy},
+  publisher={SCITEPRESS},
+  year={2022},
+  pages={25--36},
+  doi={10.5220/0010774000003120}
 }
