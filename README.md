@@ -1,5 +1,7 @@
 # flow-orientation-audit
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24238405.svg)](https://doi.org/10.5281/zenodo.24238405)
+
 Code, frozen plans, outputs and manuscript for the study **"The Sign of Directional Flow Asymmetry Depends on the Benign Reference and the Measurement Pipeline: Preregistered Tests and Robustness Audits in Network Intrusion Detection"**.
 
 The study examines a fixed, interpretable directional flow feature,
@@ -62,6 +64,6 @@ The datasets belong to their providers and are not redistributed. Code and outpu
 
 ## Citation
 
-See `CITATION.cff`. A Zenodo DOI will be added to the manuscript's data statement and to `CITATION.cff` when the first release is archived.
+See `CITATION.cff`. Archived release v1.0.1: [10.5281/zenodo.24238405](https://doi.org/10.5281/zenodo.24238405). The concept DOI, which always resolves to the latest version, is 10.5281/zenodo.24237993. (Release v1.0.0 was published before the history was pushed and archives only the initial commit; cite v1.0.1 or later.)
 
 Manuscript build: `cd manuscript && pdflatex main && bibtex main && pdflatex main && pdflatex main`; arXiv package: `python manuscript/make_arxiv.py`.

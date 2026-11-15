@@ -2,6 +2,9 @@ cff-version: 1.2.0
 message: "If you use this software or its outputs, please cite it as below."
 title: "flow-orientation-audit: code, frozen plans and audits for the sign of directional flow asymmetry"
 type: software
+version: v1.0.1
+date-released: 2026-11-15
+doi: 10.5281/zenodo.24238405
 license: MIT
 repository-code: "https://github.com/Ironsss/flow-orientation-audit"
 abstract: >-
