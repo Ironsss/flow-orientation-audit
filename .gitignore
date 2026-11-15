@@ -63,3 +63,16 @@ docs/**/*.synctex.gz
 # Misc
 *.log
 .env
+
+# arXiv build leftovers (manuscript/arxiv/arxiv_submission.zip is the tracked artifact)
+manuscript/arxiv/*
+!manuscript/arxiv/arxiv_submission.zip
+manuscript/*.pdf
+manuscript/*.aux
+manuscript/*.bbl
+manuscript/*.blg
+manuscript/*.log
+manuscript/*.out
+manuscript/*.spl
+manuscript/*.fls
+manuscript/*.fdb_latexmk
