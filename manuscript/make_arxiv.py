@@ -4,6 +4,8 @@ Run from anywhere:  python manuscript_submission/make_arxiv.py
 Output: manuscript_submission/arxiv/{main.pdf, arxiv_submission.zip}
 With --neutral: manuscript_submission/preprint/{main.pdf, supplementary.pdf}, no venue name in the
 footer (for preprint servers other than arXiv).
+With --jisa: manuscript_submission/jisa/{main.pdf, supplementary.pdf, jisa_sources.zip},
+journal name kept.
 
 arXiv ships elsarticle, so the sources are used as-is except for the journal banner
 (the manuscript was drafted for JISA, which is on hold).
@@ -19,7 +21,8 @@ import zipfile
 
 S = pathlib.Path(__file__).parent
 NEUTRAL = "--neutral" in sys.argv
-A = S / ("preprint" if NEUTRAL else "arxiv")
+JISA = "--jisa" in sys.argv  # keep the journal name in the sources; package for the Elsevier system
+A = S / ("jisa" if JISA else "preprint" if NEUTRAL else "arxiv")
 FIGS = ("fig_orientation.pdf", "fig_unsw_ecdf.pdf")
 VENUE = "" if NEUTRAL else "arXiv"
 # elsarticle can print "Preprint submitted to <journal>" on page 1; neutral mode drops that footer.
@@ -31,6 +34,8 @@ A.mkdir(exist_ok=True)
 
 
 def stamp(s):
+    if JISA:
+        return s
     s, k = re.subn(r"\\journal\{[^}]*\}", lambda m: "\\journal{" + VENUE + "}", s)
     assert k == 1, "expected exactly one \\journal{...}"
     return s.replace("\\begin{document}", NOFOOT + "\\begin{document}", 1) if NEUTRAL else s
@@ -53,6 +58,14 @@ def build(d, name):
 
 build(A, "main.tex")
 build(A, "supplementary.tex")  # ancillary file
+if JISA:
+    shutil.copy(S / "highlights.txt", A / "highlights.txt")
+    with zipfile.ZipFile(A / "jisa_sources.zip", "w", zipfile.ZIP_DEFLATED) as z:
+        for f in ("main.tex", "supplementary.tex", "references.bib", "highlights.txt",
+                  *(f"figures/{x}" for x in FIGS)):
+            z.write(A / f, f)
+    print("OK", A / "main.pdf", A / "supplementary.pdf", A / "jisa_sources.zip")
+    sys.exit(0)
 if NEUTRAL:
     print("OK", A / "main.pdf", A / "supplementary.pdf")
     sys.exit(0)

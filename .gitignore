@@ -77,3 +77,4 @@ manuscript/*.spl
 manuscript/*.fls
 manuscript/*.fdb_latexmk
 manuscript/preprint/
+manuscript/jisa/
