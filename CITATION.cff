@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software or its outputs, please cite it as below."
+title: "flow-orientation-audit: code, frozen plans and audits for the sign of directional flow asymmetry"
+type: software
+license: MIT
+repository-code: "https://github.com/Ironsss/flow-orientation-audit"
+abstract: >-
+  Code, pre-registration freezes, confirmatory outputs and robustness audits for "The Sign of Directional Flow
+  Asymmetry Depends on the Benign Reference and the Measurement Pipeline: Preregistered Tests and Robustness
+  Audits in Network Intrusion Detection".
+keywords:
+  - network intrusion detection
+  - flow asymmetry
+  - measurement validity
+  - pre-registration
+authors:
+  - family-names: "García Espinosa"
+    given-names: "David Alexis"
+    orcid: "https://orcid.org/0000-0001-6141-407X"
+  - family-names: "López S."
+    given-names: "Misael"
+    orcid: "https://orcid.org/0009-0001-8291-6340"
+  - family-names: "Malagón Martínez"
+    given-names: "J. Emilio"
+    orcid: "https://orcid.org/0009-0002-3241-6978"
+  - family-names: "Naranjo-Guerra"
+    given-names: "Jose I."
+    orcid: "https://orcid.org/0009-0006-7536-1689"

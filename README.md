@@ -1,4 +1,4 @@
-# signed-flow-orientation
+# flow-orientation-audit
 
 Code, frozen plans, outputs and manuscript for the study **"The Sign of Directional Flow Asymmetry Depends on the Benign Reference and the Measurement Pipeline: Preregistered Tests and Robustness Audits in Network Intrusion Detection"**.
 
@@ -31,7 +31,10 @@ Negative and qualifying results are kept with their numbers. Every result is lab
 | `docs/reviewer_audit/` | Protocols and reports of audits A1-A4 |
 | `docs/metodologia/`, `docs/datos-reales/`, `docs/comprension-datos/` | Original methodological documents and real-data analysis (Spanish) |
 | `data_manifests/` | SHA-256 manifests of the three datasets |
-| `manuscript/` | Manuscript (`main.tex`), supplementary material and figure script |
+| `manuscript/` | Manuscript (`main.tex`), supplementary material (`supplementary.tex`), figures and `make_arxiv.py`, which builds the arXiv package (`arxiv/arxiv_submission.zip`) |
+| `literature/` | Literature audit, source verification and the automatic bibliography check (`verify_bib.py`) |
+| `docs/ESTADO-ACTUAL.md` | Current project status (single source of truth, Spanish) |
+| `docs/ontologia/` | Concept map as an [Obsidian](https://obsidian.md) vault: open the folder as a vault. Structure only; numbers live in `docs/methodology/` |
 | `PROJECT_NOTES.md` | Working notes with the project's rules and past mistakes (see note below) |
 
 ## Reproducing
@@ -56,3 +59,9 @@ During development the authors used Claude (Anthropic; Claude Code) to write and
 ## Data and licence
 
 The datasets belong to their providers and are not redistributed. Code and outputs: MIT licence (see `LICENSE`).
+
+## Citation
+
+See `CITATION.cff`. A Zenodo DOI will be added to the manuscript's data statement and to `CITATION.cff` when the first release is archived.
+
+Manuscript build: `cd manuscript && pdflatex main && bibtex main && pdflatex main && pdflatex main`; arXiv package: `python manuscript/make_arxiv.py`.
