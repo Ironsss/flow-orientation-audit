@@ -1,10 +1,10 @@
 # Estado actual del proyecto
 
-> **Fuente única de verdad sobre dónde está el proyecto.** Los demás documentos (README, CLAUDE.md,
+> **Fuente única de verdad sobre dónde está el proyecto.** Los demás documentos (README, PROJECT_NOTES.md,
 > onboarding, metodología) enlazan aquí en vez de repetir el estado. Si el estado cambia, se
 > actualiza este archivo en el mismo PR que lo cambia.
 >
-> **Última actualización:** 2026-09-28, tras el cierre de W2 (PR #59) y la reescritura W3 (Introducción, Related Work, Abstract, Conclusiones).
+> **Última actualización:** 2026-10-02, tras el paquete de envío a JISA (PR #63–#66): auditoría de literatura, relectura del Layeghy & Portmann publicado, convergencia con la auditoría paralela de J. E. Malagón y verificación de fuentes (`literature/verification_2026-10-02.md`).
 
 ## En una frase
 
@@ -57,14 +57,14 @@ cualifican qué significa ese veredicto (ver `manuscript/main.tex`, Secciones de
 
 ## Manuscrito
 
-**Reescritura JISA en curso**, fuente `manuscript/main.tex` (aún plantilla MDPI *Symmetry*; JISA usa
-`elsarticle`; cambio de plantilla hecho en W4). Fases: **W1** (Métodos y Resultados) y **W2**
+**Fuente vigente: `manuscript/main.tex`** (JISA, `elsarticle`); `manuscript/` es el borrador MDPI
+*Symmetry*, superado. Historia de la reescritura JISA: Fases: **W1** (Métodos y Resultados) y **W2**
 (Discusión y Limitaciones, PR #59) cerradas; **W3** (Introducción, Related Work, Abstract, Título,
 Palabras clave, Conclusiones) escrita en este PR. Autoridad para cualquier discrepancia:
 `manuscript/rewrite/WRITING_EVIDENCE_CONTRACT.md`, `docs/methodology/CLAIMS_LEDGER.md` y
-`docs/reviewer_audit/AUDIT_SYNTHESIS.md`. Pendiente: autores/afiliaciones/contribuciones/financiación
-(`TODO(authors)`) y la búsqueda sistemática de literatura (Related Work usa solo
-las referencias ya verificadas de `references.bib` y su enunciado de posicionamiento lo declara).
+`docs/reviewer_audit/AUDIT_SYNTHESIS.md`. Autores, afiliaciones, ORCID, contribuciones y financiación
+ya están en el paquete de envío (`manuscript/`; ver ítem 10). Sigue pendiente la búsqueda sistemática de
+literatura (el posicionamiento lo declara: no se afirma "primer estudio").
 `paper/` es el manuscrito anterior (IAG), superado.
 
 ## Siguiente acción concreta
@@ -111,14 +111,36 @@ las referencias ya verificadas de `references.bib` y su enunciado de posicionami
    agregado ponderado de HOIC 0,0005 y LOIC-UDP 1,000).
 9. Reescritura JISA W1–W3 (2026-09-27/28): W1 Métodos/Resultados, W2 Discusión/Limitaciones (PR #59),
    W3 Introducción/Related Work/Abstract/Título/Conclusiones. No cambió ningún resultado ni se
-   re-ejecutó nada. W4 (2026-09-28): plantilla `elsarticle` aplicada a `main.tex` (compila, 48 pp en formato preprint). Paquete de envío en `manuscript_submission/` (2026-09-28): `main.tex` condensado a 12 pp con referencias, `supplementary.tex` con el manuscrito completo, highlights, cover letter y `SUBMISSION_CHECKLIST.md` (la guía de JISA no pudo consultarse: verificar). Pendiente: datos de autores, CRediT, declaración de uso de IA generativa y revisión externa de
+   re-ejecutó nada. W4 (2026-09-28): plantilla `elsarticle` aplicada a `main.tex` (compila, 48 pp en formato preprint). Paquete de envío en `manuscript/` (2026-09-28): `main.tex` condensado a 12 pp con referencias, `supplementary.tex` con el manuscrito completo, highlights, cover letter y `SUBMISSION_CHECKLIST.md` (la guía de JISA no pudo consultarse: verificar). Pendiente: datos de autores, CRediT, declaración de uso de IA generativa y revisión externa de
    la literatura citada.
+10. Cierre del paquete de envío (2026-10-01/02, PR #64–#66). Hecho: afiliación reducida a institución,
+    ciudad y país; ORCID y nombre de publicación de J. E. Malagón Martínez; sin conflictos de intereses
+    declarados por ningún autor (la herramienta de declaraciones del sistema de envío sigue por completar);
+    Layeghy & Portmann publicado releído (ocho modelos, no siete; resto confirmado); lint de
+    `literature/build_matrix.py` corregido (CI en verde en `main`); convergencia con la auditoría de
+    J. E. Malagón (Elangovan, Bouke, Jin & Lee agrupan ataques, precedentes de preregistro, reglas de Argus y
+    etiquetado NF-v2). Verificación de fuentes en [`literature/verification_2026-10-02.md`](../literature/verification_2026-10-02.md):
+    las afirmaciones sobre Jin & Lee §2.2, Elangovan §3.3.2/§4.6, D'hooge 2020 y Liu 2022 no pudieron
+    comprobarse sin acceso a los textos (editorial bloquea o es de pago). **Pendiente** (decisión de los
+    autores, no tarea de ejecución): depósito de datos y código con DOI (Option C), biografías, revisores
+    sugeridos, roles CRediT sin asignar, y recompilar los PDFs tras el merge del PR #66 (el principal pasó
+    de 12 a 14 páginas, el SM de 48 a 52).
+
+11. Preprint arXiv (2026-11-14). El destino de publicación es arXiv (JISA y Symmetry quedan descartados por ahora).
+    `python manuscript/make_arxiv.py` deriva el paquete `manuscript/arxiv/arxiv_submission.zip` (`main.tex`,
+    `main.bbl`, figuras; el SM va como `anc/supplementary.pdf`): principal 14 pp, SM 50 pp. Cerrado: los cuatro
+    coautores aprueban el texto; nombres y ORCID contrastados con el registro público; 39 referencias verificadas
+    ([`literature/references_verification.md`](../literature/references_verification.md)) y afirmaciones acotadas al
+    alcance de lo leído (D'hooge, Jin & Lee, Elangovan, Engelen; Liu 2022 sin acceso, citado solo a nivel de título).
+    Se añadió la bóveda Obsidian [`ontologia/`](ontologia/00%20Indice.md). **Falta:** DOI de Zenodo de este
+    repositorio (citarlo en *Data availability* y como entrada de software) y la cuenta/endorsement de arXiv de
+    quien envía.
 
 ## Reglas que no cambian
 
 - **UNSW-NB15 ya se usó como conjunto confirmatorio.** Probar variantes de H3 sobre él sería
   pescar features.
 - Toda hipótesis nueva requiere un freeze nuevo sobre un dataset no visto.
-- Rama → PR → revisión registrada → merge. `pytest` y `ruff check .` limpios (281 tests al
+- Rama → PR → revisión registrada → merge. `pytest` y `ruff check .` limpios (281 tests al 2026-10-02, rama del PR #66, con torch; antes al
   2026-09-27, rama `reviewer-audit-phase1`).
 - Los resultados negativos se conservan con sus números.
