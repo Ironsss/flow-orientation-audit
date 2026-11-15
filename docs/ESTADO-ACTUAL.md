@@ -132,7 +132,7 @@ literatura (el posicionamiento lo declara: no se afirma "primer estudio").
     coautores aprueban el texto; nombres y ORCID contrastados con el registro público; 39 referencias verificadas
     ([`literature/references_verification.md`](../literature/references_verification.md)) y afirmaciones acotadas al
     alcance de lo leído (D'hooge, Jin & Lee, Elangovan, Engelen; Liu 2022 sin acceso, citado solo a nivel de título).
-    Se añadió la bóveda Obsidian [`ontologia/`](ontologia/00%20Indice.md). Repositorio público archivado en Zenodo (release v1.0.1, DOI [10.5281/zenodo.24238405](https://doi.org/10.5281/zenodo.24238405); concepto 10.5281/zenodo.24237993), citado en *Data availability* y en la bibliografía; el release v1.0.0 archivó solo el commit inicial y no debe citarse. **Falta:** subir el paquete a arXiv.
+    Se añadió la bóveda Obsidian [`ontologia/`](ontologia/00%20Indice.md). Repositorio público archivado en Zenodo (release v1.0.1, DOI [10.5281/zenodo.24238405](https://doi.org/10.5281/zenodo.24238405); concepto 10.5281/zenodo.24237993), citado en *Data availability* y en la bibliografía; el release v1.0.0 archivó solo el commit inicial y no debe citarse. Preprint publicado en Zenodo (2026-11-15): DOI [10.5281/zenodo.24239092](https://doi.org/10.5281/zenodo.24239092) (concepto 10.5281/zenodo.24239091); autores con ORCID y nombres de publicación decididos por los coautores; arXiv sigue pendiente de endorsement. **Falta:** añadir las palabras clave al registro del preprint en Zenodo y subir a arXiv cuando haya endorsement.
 
 ## Reglas que no cambian
 

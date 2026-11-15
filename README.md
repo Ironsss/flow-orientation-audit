@@ -64,6 +64,6 @@ The datasets belong to their providers and are not redistributed. Code and outpu
 
 ## Citation
 
-See `CITATION.cff`. Archived release v1.0.1: [10.5281/zenodo.24238405](https://doi.org/10.5281/zenodo.24238405). The concept DOI, which always resolves to the latest version, is 10.5281/zenodo.24237993. (Release v1.0.0 was published before the history was pushed and archives only the initial commit; cite v1.0.1 or later.)
+See `CITATION.cff`. Archived release v1.0.1: [10.5281/zenodo.24238405](https://doi.org/10.5281/zenodo.24238405). Preprint (not peer reviewed): [10.5281/zenodo.24239092](https://doi.org/10.5281/zenodo.24239092). The concept DOI, which always resolves to the latest version, is 10.5281/zenodo.24237993. (Release v1.0.0 was published before the history was pushed and archives only the initial commit; cite v1.0.1 or later.)
 
 Manuscript build: `cd manuscript && pdflatex main && bibtex main && pdflatex main && pdflatex main`; arXiv package: `python manuscript/make_arxiv.py`.
