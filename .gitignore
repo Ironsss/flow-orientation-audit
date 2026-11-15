@@ -76,3 +76,4 @@ manuscript/*.out
 manuscript/*.spl
 manuscript/*.fls
 manuscript/*.fdb_latexmk
+manuscript/preprint/

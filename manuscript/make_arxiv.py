@@ -2,6 +2,8 @@
 
 Run from anywhere:  python manuscript_submission/make_arxiv.py
 Output: manuscript_submission/arxiv/{main.pdf, arxiv_submission.zip}
+With --neutral: manuscript_submission/preprint/{main.pdf, supplementary.pdf}, no venue name in the
+footer (for preprint servers other than arXiv).
 
 arXiv ships elsarticle, so the sources are used as-is except for the journal banner
 (the manuscript was drafted for JISA, which is on hold).
@@ -12,23 +14,30 @@ import pathlib
 import re
 import shutil
 import subprocess
+import sys
 import zipfile
 
 S = pathlib.Path(__file__).parent
-A = S / "arxiv"
+NEUTRAL = "--neutral" in sys.argv
+A = S / ("preprint" if NEUTRAL else "arxiv")
 FIGS = ("fig_orientation.pdf", "fig_unsw_ecdf.pdf")
+VENUE = "" if NEUTRAL else "arXiv"
+# elsarticle can print "Preprint submitted to <journal>" on page 1; neutral mode drops that footer.
+NOFOOT = (r"\makeatletter\def\ps@pprintTitle{\let\@oddhead\@empty\let\@evenhead\@empty"
+          r"\def\@oddfoot{\centerline{\thepage}}\let\@evenfoot\@oddfoot}\makeatother" + "\n")
 
 A.mkdir(exist_ok=True)
 (A / "figures").mkdir(exist_ok=True)
 
-src = (S / "main.tex").read_text(encoding="utf-8")
-# The preprint must not claim a journal; elsarticle prints "Preprint submitted to <journal>".
-src, n = re.subn(r"\\journal\{[^}]*\}", r"\\journal{arXiv}", src)
-assert n == 1, "expected exactly one \\journal{...}"
-(A / "main.tex").write_text(src, encoding="utf-8")
-sm = (S / "supplementary.tex").read_text(encoding="utf-8")
-sm = re.sub(r"\\journal\{[^}]*\}", r"\\journal{arXiv}", sm)
-(A / "supplementary.tex").write_text(sm, encoding="utf-8")
+
+def stamp(s):
+    s, k = re.subn(r"\\journal\{[^}]*\}", lambda m: "\\journal{" + VENUE + "}", s)
+    assert k == 1, "expected exactly one \\journal{...}"
+    return s.replace("\\begin{document}", NOFOOT + "\\begin{document}", 1) if NEUTRAL else s
+
+
+for name in ("main.tex", "supplementary.tex"):
+    (A / name).write_text(stamp((S / name).read_text(encoding="utf-8")), encoding="utf-8")
 shutil.copy(S / "references.bib", A)
 for f in FIGS:
     shutil.copy(S / "figures" / f, A / "figures" / f)
@@ -44,6 +53,9 @@ def build(d, name):
 
 build(A, "main.tex")
 build(A, "supplementary.tex")  # ancillary file
+if NEUTRAL:
+    print("OK", A / "main.pdf", A / "supplementary.pdf")
+    sys.exit(0)
 
 with zipfile.ZipFile(A / "arxiv_submission.zip", "w", zipfile.ZIP_DEFLATED) as z:
     for f in ("main.tex", "main.bbl", *(f"figures/{x}" for x in FIGS)):
